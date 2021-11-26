@@ -2,9 +2,11 @@ package com.example.sportmate.controller;
 
 import com.example.sportmate.record.LoginRequestDto;
 import com.example.sportmate.record.LoginResponseDto;
+import com.example.sportmate.record.ResponseDefaultDto;
 import com.example.sportmate.record.SigninRequestDto;
 import com.example.sportmate.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +24,8 @@ public class LoginController {
     }
 
     @PostMapping(SIGNIN)
-    private void signin(@RequestBody SigninRequestDto signinRequestDto){
-        loginService.signin(signinRequestDto);
+    private ResponseEntity<ResponseDefaultDto> signin(@RequestBody SigninRequestDto signinRequestDto){
+        return loginService.signin(signinRequestDto);
     }
 
     @PostMapping(LOGIN)

@@ -5,11 +5,14 @@ import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.LoginRequestDto;
 import com.example.sportmate.record.LoginResponseDto;
+import com.example.sportmate.record.ResponseDefaultDto;
 import com.example.sportmate.record.SigninRequestDto;
 import com.example.sportmate.repository.UsersRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,10 +36,11 @@ public class LoginService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void signin(SigninRequestDto signinRequestDto){
+    public ResponseEntity<ResponseDefaultDto> signin(SigninRequestDto signinRequestDto){
         String passwordEncoded = passwordEncoder.encode(signinRequestDto.password());
         Users userToSaved = buildUsers(signinRequestDto, passwordEncoded);
         usersRepository.save(userToSaved);
+        return new ResponseEntity<>(new ResponseDefaultDto("Création du compte réalisée avec succès"), HttpStatus.CREATED);
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto){

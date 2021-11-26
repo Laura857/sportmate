@@ -1,5 +1,6 @@
 package com.example.sportmate.repository;
 
+import com.example.sportmate.DataTest;
 import com.example.sportmate.entity.Level;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class LevelRepositoryTest {
-    private final String LEVEL_NAME = "Débutant";
+class LevelRepositoryTest implements DataTest {
 
     private final LevelRepository levelRepository;
 
