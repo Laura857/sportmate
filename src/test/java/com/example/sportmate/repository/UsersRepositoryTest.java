@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UsersRepositoryTest {
     public static final String EMAIL = "test@gmail.com";
     public static final String PASSWORD = "un_mot_de_passe";
-    public static final String TOKEN = null;
     public static final String LAST_NAME = "Pierre";
     public static final String FIRST_NAME = "Dupont";
     public static final String MOBILE = "0606060606";
@@ -42,12 +41,12 @@ class UsersRepositoryTest {
         int usersSavedId = instantiateAndSaveNewUsers(uniqueEmailGenerated);
         Optional<Users> usersFind = usersRepository.findById(usersSavedId);
         assertThat(usersFind).isPresent();
-        assertThat(usersFind.get()).isEqualTo(new Users(usersSavedId, uniqueEmailGenerated, PASSWORD, TOKEN, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
+        assertThat(usersFind.get()).isEqualTo(new Users(usersSavedId, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null));
     }
 
     private int instantiateAndSaveNewUsers(String uniqueEmailGenerated) {
-        final Users users = new Users(null, uniqueEmailGenerated, PASSWORD, TOKEN, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
+        final Users users = new Users(null, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null);
         return usersRepository.save(users).id();
     }

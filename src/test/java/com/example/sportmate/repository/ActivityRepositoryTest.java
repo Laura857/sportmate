@@ -43,7 +43,7 @@ class ActivityRepositoryTest {
     }
 
     private Activity instantiateAndSaveNewActivity() {
-        final Users users = new Users(null, generateUniqueEmail(), PASSWORD, TOKEN, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
+        final Users users = new Users(null, generateUniqueEmail(), PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null);
         Integer usersSavedId = usersRepository.save(users).id();
         final Activity activity = new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, usersSavedId,
