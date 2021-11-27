@@ -2,8 +2,10 @@ package com.example.sportmate.controller;
 
 import com.example.sportmate.record.ActivityRequestDto;
 import com.example.sportmate.record.ActivityResponseDto;
+import com.example.sportmate.record.ResponseDefaultDto;
 import com.example.sportmate.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +26,13 @@ public class ActivityController {
     }
 
     @DeleteMapping(ACTIVITY_ID)
-    private void deleteActivity(@PathVariable Integer id){
-        activityService.deleteActivity(id);
+    private ResponseEntity<ResponseDefaultDto> deleteActivity(@PathVariable Integer id){
+        return activityService.deleteActivity(id);
     }
 
     @PostMapping(ACTIVITY)
-    private void createActivity(@RequestBody ActivityRequestDto activityRequestDto, @RequestHeader (name=HEADER) String token){
-        activityService.createActivity(activityRequestDto, token);
+    private ActivityResponseDto createActivity(@RequestBody ActivityRequestDto activityRequestDto, @RequestHeader (name=HEADER) String token){
+        return activityService.createActivity(activityRequestDto, token);
     }
 
     @GetMapping(ACTIVITY_ID)

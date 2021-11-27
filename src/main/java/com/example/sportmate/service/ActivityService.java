@@ -8,13 +8,17 @@ import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.ActivityRequestDto;
 import com.example.sportmate.record.ActivityResponseDto;
+import com.example.sportmate.record.ResponseDefaultDto;
 import com.example.sportmate.repository.ActivityRepository;
 import com.example.sportmate.repository.LevelRepository;
 import com.example.sportmate.repository.SportRepository;
 import com.example.sportmate.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,11 +47,12 @@ public class ActivityService {
         this.levelRepository = levelRepository;
     }
 
-    public void deleteActivity(Integer id){
+    public ResponseEntity<ResponseDefaultDto> deleteActivity(Integer id){
         activityRepository.deleteById(id);
+        return new ResponseEntity<>(new ResponseDefaultDto("Activité " + id +" supprimé"), HttpStatus.OK);
     }
 
-    public void createActivity(ActivityRequestDto activityRequestDto, String token){
+    public ActivityResponseDto createActivity(ActivityRequestDto activityRequestDto, String token){
         Sport sport = sportRepository.findByLabel(activityRequestDto.sport())
                 .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
         Level level = levelRepository.findByLabel(activityRequestDto.activityLevel())
@@ -55,7 +60,9 @@ public class ActivityService {
         Users user = usersRepository.findByEmail(findEmailInToken(token))
                 .orElseThrow(() -> new NotFoundException("Utilisteur non trouvé"));
         Activity activityToSave = buildActivity(activityRequestDto, user, sport, level);
-        activityRepository.save(activityToSave);
+        Activity activitySaved = activityRepository.save(activityToSave);
+        return buildActivityResponseDto(activitySaved);
+
     }
 
     public ActivityResponseDto getActivity(Integer id){
