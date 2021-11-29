@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/sportmate-0.0.1-SNAPSHOT.jar --spring.profile.active=heroku --server.port=$PORT $JAR_OPTS
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar target/*.jar
