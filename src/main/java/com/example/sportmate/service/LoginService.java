@@ -56,7 +56,7 @@ public class LoginService {
         return !passwordEncoder.matches(loginRequestDto.password(), user.password());
     }
 
-    private String getJWTToken(String username) {
+    public String getJWTToken(String username) {
         String secretKey = "mySecretKey";
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
