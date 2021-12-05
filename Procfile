@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar --spring.config.name=application
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar --spring.config.name=application --spring.config.location=classpath:/application.yaml
