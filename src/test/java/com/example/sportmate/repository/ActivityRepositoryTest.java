@@ -1,5 +1,6 @@
 package com.example.sportmate.repository;
 
+import com.example.sportmate.DataTest;
 import com.example.sportmate.entity.Activity;
 import com.example.sportmate.entity.Users;
 import org.junit.jupiter.api.Test;
@@ -13,17 +14,7 @@ import static com.example.sportmate.repository.UsersRepositoryTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class ActivityRepositoryTest {
-    private final String ACTIVITY_NAME = "Cours de natation en pleine air";
-    private final LocalDate ACTIVITY_DATE = LocalDate.now();
-    private final boolean IS_EVENT = false;
-    private final String ADRESS = "Piscine Monge";
-    private final String LONGITUDE = "Natation";
-    private final String LATITUDE = "Natation";
-    private final Integer PARTICIPANT = 10;
-    private final int LEVEL_ID = 1;
-    private final int SPORT_ID = 1;
-    private final LocalDate CREATED_DATE = LocalDate.now();
+class ActivityRepositoryTest implements DataTest {
 
     private final ActivityRepository activityRepository;
     private final UsersRepository usersRepository;
@@ -43,8 +34,7 @@ class ActivityRepositoryTest {
     }
 
     private Activity instantiateAndSaveNewActivity() {
-        final Users users = new Users(null, generateUniqueEmail(), PASSWORD, TOKEN, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
-                SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null);
+        final Users users = DataTest.buildNewUser();
         Integer usersSavedId = usersRepository.save(users).id();
         final Activity activity = new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, usersSavedId,
                 ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, CREATED_DATE, null);
