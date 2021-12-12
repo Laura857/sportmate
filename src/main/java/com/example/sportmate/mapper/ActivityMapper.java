@@ -21,10 +21,10 @@ public class ActivityMapper {
         return buildActivity(activityRequestDto, user, sport, level, null);
     }
 
-    public static ActivityResponseDto buildActivityResponseDto(Activity activity) {
+    public static ActivityResponseDto buildActivityResponseDto(Activity activity, Sport sport, Level activityLevel) {
         return new ActivityResponseDto(activity.id(), activity.isEvent(), activity.activityName(),
                 activity.activityDate(), activity.creator(), activity.address(),
                 activity.longitude(), activity.latitude(), activity.participant(),
-                activity.sport(), activity.activityLevel());
+                sport.label(), activityLevel.label(), activity.contact(), activity.description());
     }
 }
