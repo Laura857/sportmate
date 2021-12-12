@@ -14,7 +14,7 @@ public class ActivityMapper {
         return new Activity(activityId, activityRequestDto.isEvent(), activityRequestDto.activityName(),
                 activityRequestDto.activityDate(), user.id(), activityRequestDto.address(),
                 activityRequestDto.longitude(), activityRequestDto.latitude(), activityRequestDto.participant(),
-                sport.id(), level.id(), LocalDate.now(), null);
+                sport.id(), level.id(), activityRequestDto.description(), activityRequestDto.contact(), LocalDate.now(), null);
     }
 
     public static Activity buildActivity(ActivityRequestDto activityRequestDto, Users user, Sport sport, Level level) {

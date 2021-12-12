@@ -19,6 +19,8 @@ public interface DataTest {
     String LATITUDE = "Natation";
     Integer PARTICIPANT = 10;
     int LEVEL_ID = 1;
+    String CONTACT = "0606060606";
+    String DESCRIPTION = "description";
     int SPORT_ID = 1;
     LocalDate CREATED_DATE = LocalDate.now();
     String LEVEL_NAME = "Débutant";
@@ -42,12 +44,12 @@ public interface DataTest {
 
     static Activity buildActivity() {
         return new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, CREATED_DATE, null);
+                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
     }
 
     static Activity buildActivity(Integer id) {
         return new Activity(id, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, CREATED_DATE, null);
+                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
     }
 
 }
