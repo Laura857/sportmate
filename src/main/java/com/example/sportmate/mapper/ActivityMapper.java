@@ -25,6 +25,6 @@ public class ActivityMapper {
         return new ActivityResponseDto(activity.id(), activity.isEvent(), activity.activityName(),
                 activity.activityDate(), activity.creator(), activity.address(),
                 activity.longitude(), activity.latitude(), activity.participant(),
-                activity.sport(), activity.activityLevel());
+                activity.sport(), activity.activityLevel(), activity.contact(), activity.description());
     }
 }
