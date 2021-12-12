@@ -37,7 +37,7 @@ class ActivityRepositoryTest implements DataTest {
         final Users users = DataTest.buildNewUser();
         Integer usersSavedId = usersRepository.save(users).id();
         final Activity activity = new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, usersSavedId,
-                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, CREATED_DATE, null);
+                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
         return activityRepository.save(activity);
     }
 

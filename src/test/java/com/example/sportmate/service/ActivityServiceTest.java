@@ -66,7 +66,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void createActivity_should_not_find_sport_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, loginService.getJWTToken(EMAIL)))
@@ -77,7 +77,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void createActivity_should_not_find_level_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
 
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.empty());
@@ -90,7 +90,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void createActivity_should_not_find_user_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
 
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.of(new Level(null, LEVEL_NAME)));
@@ -104,7 +104,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void createActivity_should_save_new_user() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
         Sport sport = new Sport(null, SPORT_NAME);
         Level level = new Level(null, LEVEL_NAME);
         Users user = DataTest.buildNewUser();
@@ -154,7 +154,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void updateActivity_should_not_find_sport_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL)))
@@ -165,7 +165,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void updateActivity_should_not_find_level_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
 
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.empty());
@@ -178,7 +178,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void updateActivity_should_not_find_user_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
 
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.of(new Level(null, LEVEL_NAME)));
@@ -192,7 +192,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void updateActivity_should_not_find_activity_so_throw_NotFoundException() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
 
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.of(new Level(null, LEVEL_NAME)));
@@ -207,7 +207,7 @@ class ActivityServiceTest implements DataTest {
     @Test
     void updateActivity_should_save_new_user() {
         ActivityRequestDto activityRequestDto = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, DESCRIPTION, CONTACT);
 
         Sport sport = new Sport(null, SPORT_NAME);
         Level level = new Level(null, LEVEL_NAME);
@@ -233,7 +233,7 @@ class ActivityServiceTest implements DataTest {
 
     private void instantiateAndSaveNewActivity() {
         final Activity activity = new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, CREATED_DATE, null);
+                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
         activityRepository.save(activity);
     }
 }

@@ -15,6 +15,8 @@ public record Activity(@Id Integer id,
                        Integer participant,
                        Integer sport,
                        Integer activityLevel,
+                       String description,
+                       String contact,
                        LocalDate created,
                        LocalDate updated) {
 }
