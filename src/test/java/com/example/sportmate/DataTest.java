@@ -1,6 +1,8 @@
 package com.example.sportmate;
 
 import com.example.sportmate.entity.Activity;
+import com.example.sportmate.entity.Level;
+import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
 import com.example.sportmate.enumeration.Sex;
 import org.springframework.data.relational.core.sql.In;
@@ -52,4 +54,11 @@ public interface DataTest {
                 ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
     }
 
+    static Sport buildSport(){
+       return new Sport(null, SPORT_NAME);
+    }
+
+    static Level buildLevel(){
+       return new Level(null, LEVEL_NAME);
+    }
 }

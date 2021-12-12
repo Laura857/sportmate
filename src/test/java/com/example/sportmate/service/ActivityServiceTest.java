@@ -115,15 +115,19 @@ class ActivityServiceTest implements DataTest {
         when(activityRepository.save(ActivityMapper.buildActivity(activityRequestDto, user, sport, level))).thenReturn(activity);
 
         ActivityResponseDto activitySaved = activityService.createActivity(activityRequestDto, loginService.getJWTToken(EMAIL));
-        assertThat(activitySaved).isEqualTo(buildActivityResponseDto(activity));
+        assertThat(activitySaved).isEqualTo(buildActivityResponseDto(activity, sport, level));
     }
 
     @Test
     void getActivity_should_find_activity() {
         Activity activity = DataTest.buildActivity();
+        Sport sport = DataTest.buildSport();
+        Level level = DataTest.buildLevel();
         when(activityRepository.findById(ID)).thenReturn(Optional.of(activity));
+        when(sportRepository.findById(activity.sport())).thenReturn(Optional.of(sport));
+        when(levelRepository.findById(activity.activityLevel())).thenReturn(Optional.of(level));
         ActivityResponseDto activityResponseDto = activityService.getActivity(ID);
-        assertThat(activityResponseDto).isEqualTo(buildActivityResponseDto(activity));
+        assertThat(activityResponseDto).isEqualTo(buildActivityResponseDto(activity, sport, level));
     }
 
     @Test
@@ -138,17 +142,25 @@ class ActivityServiceTest implements DataTest {
     @Test
     void getAllActivities_should_retourne_all_activity_saved() {
         Activity activity = DataTest.buildActivity();
+        Sport sport = DataTest.buildSport();
+        Level level = DataTest.buildLevel();
         when(activityRepository.findAll()).thenReturn(singletonList(activity));
+        when(sportRepository.findById(activity.sport())).thenReturn(Optional.of(sport));
+        when(levelRepository.findById(activity.activityLevel())).thenReturn(Optional.of(level));
         List<ActivityResponseDto> allActivities = activityService.getAllActivities();
-        assertThat(allActivities).isEqualTo(singletonList(buildActivityResponseDto(activity)));
+        assertThat(allActivities).isEqualTo(singletonList(buildActivityResponseDto(activity, sport, level)));
     }
 
     @Test
     void getUserActivities() {
         Activity activity = DataTest.buildActivity();
+        Sport sport = DataTest.buildSport();
+        Level level = DataTest.buildLevel();
         when(activityRepository.findActivitiesByEmail(EMAIL)).thenReturn(singletonList(activity));
+        when(sportRepository.findById(activity.sport())).thenReturn(Optional.of(sport));
+        when(levelRepository.findById(activity.activityLevel())).thenReturn(Optional.of(level));
         List<ActivityResponseDto> allActivities = activityService.getUserActivities(loginService.getJWTToken(EMAIL));
-        assertThat(allActivities).isEqualTo(singletonList(buildActivityResponseDto(activity)));
+        assertThat(allActivities).isEqualTo(singletonList(buildActivityResponseDto(activity, sport, level)));
     }
 
     @Test
@@ -220,7 +232,7 @@ class ActivityServiceTest implements DataTest {
         when(activityRepository.save(ActivityMapper.buildActivity(activityRequestDto, user, sport, level, activity.id()))).thenReturn(activity);
 
         ActivityResponseDto activitySaved = activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL));
-        assertThat(activitySaved).isEqualTo(buildActivityResponseDto(activity));
+        assertThat(activitySaved).isEqualTo(buildActivityResponseDto(activity, sport, level));
     }
 
     @Test

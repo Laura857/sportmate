@@ -15,7 +15,6 @@ import com.example.sportmate.repository.SportRepository;
 import com.example.sportmate.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,28 +60,42 @@ public class ActivityService {
                 .orElseThrow(() -> new NotFoundException("Utilisteur non trouvé"));
         Activity activityToSave = buildActivity(activityRequestDto, user, sport, level);
         Activity activitySaved = activityRepository.save(activityToSave);
-        return buildActivityResponseDto(activitySaved);
+        return buildActivityResponseDto(activitySaved, sport, level);
 
     }
 
     public ActivityResponseDto getActivity(Integer id){
         Activity activity = activityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Auncune activité trouvée avec l'id " + id));
-        return buildActivityResponseDto(activity);
+        Sport sport = sportRepository.findById(activity.sport())
+                .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
+        Level level = levelRepository.findById(activity.activityLevel())
+                .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
+        return buildActivityResponseDto(activity, sport, level);
     }
 
     public List<ActivityResponseDto> getAllActivities(){
         List<ActivityResponseDto> activityResponse = new ArrayList<>();
-        Iterable<Activity> allActivitiesFind = activityRepository.findAll();
-        allActivitiesFind.forEach(activity -> activityResponse.add(buildActivityResponseDto(activity)));
+        List<Activity> allActivitiesFind = (List<Activity>) activityRepository.findAll();
+        return buildActivityResponse(allActivitiesFind);
+    }
+
+    private List<ActivityResponseDto> buildActivityResponse(List<Activity> allActivitiesFind) {
+        List<ActivityResponseDto> activityResponse = new ArrayList<>();
+        allActivitiesFind.forEach(activity -> {
+            Sport sport = sportRepository.findById(activity.sport())
+                    .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
+            Level level = levelRepository.findById(activity.activityLevel())
+                    .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
+            activityResponse.add(buildActivityResponseDto(activity, sport, level));
+        });
         return activityResponse;
     }
 
     public List<ActivityResponseDto> getUserActivities(String token){
         List<ActivityResponseDto> activityResponse = new ArrayList<>();
         List<Activity> activitiesByToken = activityRepository.findActivitiesByEmail(findEmailInToken(token));
-        activitiesByToken.forEach(activity -> activityResponse.add(buildActivityResponseDto(activity)));
-        return activityResponse;
+        return buildActivityResponse(activitiesByToken);
     }
 
     public ActivityResponseDto updateActivity(ActivityRequestDto activityRequestDto, Integer id, String token){
@@ -97,7 +110,7 @@ public class ActivityService {
 
         Activity activityToSave = buildActivity(activityRequestDto, user, sport, level, activityFind.id());
         Activity activitySaved = activityRepository.save(activityToSave);
-        return buildActivityResponseDto(activitySaved);
+        return buildActivityResponseDto(activitySaved, sport, level);
     }
 
     private String findEmailInToken(String token){
