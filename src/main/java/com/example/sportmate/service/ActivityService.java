@@ -75,12 +75,11 @@ public class ActivityService {
     }
 
     public List<ActivityResponseDto> getAllActivities(){
-        List<ActivityResponseDto> activityResponse = new ArrayList<>();
         List<Activity> allActivitiesFind = (List<Activity>) activityRepository.findAll();
-        return buildActivityResponse(allActivitiesFind);
+        return buildActivityResponseSortByDate(allActivitiesFind);
     }
 
-    private List<ActivityResponseDto> buildActivityResponse(List<Activity> allActivitiesFind) {
+    private List<ActivityResponseDto> buildActivityResponseSortByDate(List<Activity> allActivitiesFind) {
         List<ActivityResponseDto> activityResponse = new ArrayList<>();
         allActivitiesFind.forEach(activity -> {
             Sport sport = sportRepository.findById(activity.sport())
@@ -89,13 +88,13 @@ public class ActivityService {
                     .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
             activityResponse.add(buildActivityResponseDto(activity, sport, level));
         });
+        activityResponse.sort(new ActivityResponseDto.DateComparator());
         return activityResponse;
     }
 
     public List<ActivityResponseDto> getUserActivities(String token){
-        List<ActivityResponseDto> activityResponse = new ArrayList<>();
         List<Activity> activitiesByToken = activityRepository.findActivitiesByEmail(findEmailInToken(token));
-        return buildActivityResponse(activitiesByToken);
+        return buildActivityResponseSortByDate(activitiesByToken);
     }
 
     public ActivityResponseDto updateActivity(ActivityRequestDto activityRequestDto, Integer id, String token){
