@@ -10,7 +10,7 @@ public record ActivityResponseDto(Integer id, boolean isEvent, String activityNa
     public static class DateComparator implements Comparator<ActivityResponseDto> {
         @Override
         public int compare(ActivityResponseDto activity1, ActivityResponseDto activity2) {
-            return activity1.activityDate().compareTo(activity2.activityDate());
+            return activity2.activityDate().compareTo(activity1.activityDate());
         }
     }
 }
