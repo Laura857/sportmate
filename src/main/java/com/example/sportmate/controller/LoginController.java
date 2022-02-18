@@ -2,18 +2,18 @@ package com.example.sportmate.controller;
 
 import com.example.sportmate.record.LoginRequestDto;
 import com.example.sportmate.record.LoginResponseDto;
-import com.example.sportmate.record.ResponseDefaultDto;
-import com.example.sportmate.record.SigninRequestDto;
+import com.example.sportmate.record.signin.SigningRequestDto;
 import com.example.sportmate.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class LoginController {
-    private final String SIGNIN = "api/signin";
+    private final String SIGNING_AND_LOGIN = "api/signingAndLogin";
     private final String LOGIN =  "api/login";
 
     private final LoginService loginService;
@@ -23,13 +23,13 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @PostMapping(SIGNIN)
-    private ResponseEntity<ResponseDefaultDto> signin(@RequestBody SigninRequestDto signinRequestDto){
-        return loginService.signin(signinRequestDto);
+    @PostMapping(SIGNING_AND_LOGIN)
+    private LoginResponseDto signingAndLogin(@RequestBody @Valid SigningRequestDto signingRequestDto){
+        return loginService.signingAndLogin(signingRequestDto);
     }
 
     @PostMapping(LOGIN)
-    private LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto){
+    private LoginResponseDto login(@RequestBody @Valid LoginRequestDto loginRequestDto){
         return loginService.login(loginRequestDto);
     }
 }

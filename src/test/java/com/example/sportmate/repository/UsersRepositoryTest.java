@@ -28,12 +28,12 @@ public class UsersRepositoryTest implements DataTest {
         Optional<Users> usersFind = usersRepository.findById(usersSavedId);
         assertThat(usersFind).isPresent();
         assertThat(usersFind.get()).isEqualTo(new Users(usersSavedId, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
-                SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null));
+                GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null));
     }
 
     private int instantiateAndSaveNewUsers(String uniqueEmailGenerated) {
         final Users users = new Users(null, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
-                SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null);
+                GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null);
         return usersRepository.save(users).id();
     }
 

@@ -4,12 +4,11 @@ import com.example.sportmate.entity.Activity;
 import com.example.sportmate.entity.Level;
 import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
-import com.example.sportmate.enumeration.Sex;
-import org.springframework.data.relational.core.sql.In;
+import com.example.sportmate.enumeration.Genre;
 
 import java.time.LocalDate;
 
-import static com.example.sportmate.enumeration.Sex.FEMME;
+import static com.example.sportmate.enumeration.Genre.FEMME;
 import static com.example.sportmate.repository.UsersRepositoryTest.generateUniqueEmail;
 
 public interface DataTest {
@@ -27,21 +26,22 @@ public interface DataTest {
     LocalDate CREATED_DATE = LocalDate.now();
     String LEVEL_NAME = "Débutant";
     String SPORT_NAME = "Natation";
+    String HOBBIES = "Cinéma";
     String EMAIL = "test@gmail.com";
-    String TOKEN = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
+    String TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
     String PASSWORD = "un_mot_de_passe";
     String LAST_NAME = "Pierre";
     String FIRST_NAME = "Dupont";
     String MOBILE = "0606060606";
     String PROFILE_PICTURE = "Natation";
-    Sex SEX = FEMME;
+    Genre GENRE = FEMME;
     boolean CONSENTS = false;
     LocalDate BIRTHDAY = LocalDate.now();
     Integer ID = 1;
 
     static Users buildNewUser() {
         return new Users(null, generateUniqueEmail(), PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
-                SEX, BIRTHDAY, CONSENTS, CREATED_DATE, null);
+                GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null);
     }
 
     static Activity buildActivity() {

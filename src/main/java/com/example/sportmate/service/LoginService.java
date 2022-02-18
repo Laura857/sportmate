@@ -1,80 +1,114 @@
 package com.example.sportmate.service;
 
+import com.example.sportmate.entity.Hobbies;
+import com.example.sportmate.entity.Level;
+import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
 import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.LoginRequestDto;
 import com.example.sportmate.record.LoginResponseDto;
-import com.example.sportmate.record.ResponseDefaultDto;
-import com.example.sportmate.record.SigninRequestDto;
-import com.example.sportmate.repository.UsersRepository;
+import com.example.sportmate.record.signin.SigningRequestDto;
+import com.example.sportmate.repository.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.sportmate.mapper.UsersMapper.buildUsers;
+import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
+
 
 @Service
+@AllArgsConstructor
 public class LoginService {
     private final UsersRepository usersRepository;
+    private final UserHobbiesRepository userHobbiesRepository;
+    private final HobbiesRepository hobbiesRepository;
+    private final SportRepository sportRepository;
+    private final LevelRepository levelRepository;
+    private final UserFavoriteSportRepository userFavoriteSportRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public LoginService(final UsersRepository usersRepository,
-                        final PasswordEncoder passwordEncoder) {
-        this.usersRepository = usersRepository;
-        this.passwordEncoder = passwordEncoder;
+    @Transactional
+    public LoginResponseDto signingAndLogin(final SigningRequestDto signingRequest) {
+        try {
+            final Users userSaved = saveUser(signingRequest);
+            saveAllHobbies(signingRequest, userSaved);
+            saveAllFavoriteSports(signingRequest, userSaved);
+            return login(signingRequest.login());
+        } catch (Exception exception) {
+            if (nonNull(exception.getCause()) && exception.getCause().toString().contains("duplicate key value violates unique constraint \"users_email_key\"")) {
+                throw new AuthenticationException("Un compte existe déjà pour cette adresse email.");
+            }
+            throw new AuthenticationException(exception.getMessage());
+        }
     }
 
-    public ResponseEntity<ResponseDefaultDto> signin(SigninRequestDto signinRequestDto){
-        String passwordEncoded = passwordEncoder.encode(signinRequestDto.password());
-        Users userToSaved = buildUsers(signinRequestDto, passwordEncoded);
-        usersRepository.save(userToSaved);
-        return new ResponseEntity<>(new ResponseDefaultDto("Création du compte réalisée avec succès"), HttpStatus.CREATED);
+    private void saveAllFavoriteSports(final SigningRequestDto signingRequest, final Users userSaved) {
+        signingRequest.sports().forEach(sport -> {
+            final Sport sportFound = sportRepository.findByLabel(sport.name())
+                    .orElseThrow(() -> new NotFoundException("Inscription erreur : sport non trouvé"));
+            final Level levelFound = levelRepository.findByLabel(sport.level())
+                    .orElseThrow(() -> new NotFoundException("Inscription erreur : niveau non trouvé"));
+            userFavoriteSportRepository.save(userSaved.id(), sportFound.id(), levelFound.id());
+        });
     }
 
-    public LoginResponseDto login(LoginRequestDto loginRequestDto){
-        Users user = usersRepository.findByEmail(loginRequestDto.email())
+    private Users saveUser(final SigningRequestDto signingRequest) {
+        final String passwordEncoded = passwordEncoder.encode(signingRequest.login().password());
+        final Users userToSaved = buildUsers(signingRequest, passwordEncoded);
+        return usersRepository.save(userToSaved);
+    }
+
+    private void saveAllHobbies(final SigningRequestDto signingRequest, final Users userSaved) {
+        signingRequest.hobbies()
+                .forEach(hobbies -> {
+                            Hobbies hobbiesFound = hobbiesRepository.findByLabel(hobbies)
+                                    .orElseThrow(() -> new NotFoundException("Inscription erreur : hobbies non trouvé"));
+                            userHobbiesRepository.save(userSaved.id(), hobbiesFound.id());
+                        }
+                );
+    }
+
+    public LoginResponseDto login(final LoginRequestDto loginRequestDto) {
+        final Users user = usersRepository.findByEmail(loginRequestDto.email())
                 .orElseThrow(() -> new NotFoundException("Connexion refusée : utilisateur non trouvé"));
-        if(isPasswordNoMatch(loginRequestDto, user)){
+        if (isPasswordNoMatch(loginRequestDto, user)) {
             throw new AuthenticationException("Le mot de passe est incorrect");
         }
         return new LoginResponseDto(user.email(), getJWTToken(loginRequestDto.email()));
     }
 
-    private boolean isPasswordNoMatch(LoginRequestDto loginRequestDto, Users user) {
+    private boolean isPasswordNoMatch(final LoginRequestDto loginRequestDto, final Users user) {
         return !passwordEncoder.matches(loginRequestDto.password(), user.password());
     }
 
-    public String getJWTToken(String username) {
-        String secretKey = "mySecretKey";
+    public String getJWTToken(final String username) {
+        final String secretKey = "mySecretKey";
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
 
-        String token = Jwts
+        return Jwts
                 .builder()
                 .setId("softtekJWT")
                 .setSubject(username)
                 .claim("authorities",
                         grantedAuthorities.stream()
                                 .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
+                                .collect(toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 600000))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
-
-        return token;
     }
 }
 
