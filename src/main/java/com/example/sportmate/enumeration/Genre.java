@@ -1,5 +1,5 @@
 package com.example.sportmate.enumeration;
 
-public enum Sex {
+public enum Genre {
     HOMME, FEMME;
 }
