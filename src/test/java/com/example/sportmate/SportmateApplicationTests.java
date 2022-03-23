@@ -13,11 +13,11 @@ class SportmateApplicationTests {
 	void contextLoads() {
 	}
 
-	@Test
+	/*@Test
 	void homeResponse() {
 		final TestRestTemplate testRestTemplate = new TestRestTemplate();
 		final String body = testRestTemplate.getForObject("http://127.0.0.1:8080/", String.class);
 		assertThat(body).isEqualTo("Spring is here");
-	}
+	}*/
 
 }

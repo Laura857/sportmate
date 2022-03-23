@@ -1,0 +1,14 @@
+ALTER TABLE users
+    ALTER COLUMN last_name SET NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN first_name SET NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN sex SET NOT NULL;
+
+ALTER TABLE users
+    RENAME COLUMN sex TO genre;
+
+ALTER TABLE users
+    ALTER COLUMN mobile SET NOT NULL;

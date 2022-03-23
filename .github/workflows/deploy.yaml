@@ -1,0 +1,28 @@
+name: Deploy website to Heroku
+on:
+  push:
+    branches:
+      - master
+      - develop
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Init projet
+        uses: actions/checkout@v2
+      - name: Deploy prod to Heroku
+        if: github.ref == 'refs/heads/master'
+        uses: AkhileshNS/heroku-deploy@v3.8.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_API_APP_MASTER}}
+          heroku_email: ${{secrets.HEROKU_API_EMAIL}}
+          branch: "master"
+      - name: Deploy preprod to Heroku
+        if: github.ref == 'refs/heads/develop'
+        uses: AkhileshNS/heroku-deploy@v3.8.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_API_APP_DEVELOP}}
+          heroku_email: ${{secrets.HEROKU_API_EMAIL}}
+          branch: "develop"

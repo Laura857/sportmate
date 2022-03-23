@@ -4,6 +4,12 @@ spring:
     username: ${DATABASE_USERNAME:admin}
     password: ${DATABASE_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -17,10 +23,19 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: false
 
+
 logging:
   level:
-    root: INFO
-    com.zaxxer.hikari: ERROR
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+        SQL: DEBUG
+      springframework:
+        jdbc:
+          core: TRACE
 
 server:
-  port: 8080
+  port: ${PORT:8080}
