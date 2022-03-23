@@ -1,9 +1,10 @@
 package com.example.sportmate.record;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Regex {
     public static final String EMAIL = "^[a-z0-9!#$%&’*+-/=?`{|}~_]+(?:\\.[a-z0-9!#$%&’*+-/=?`{|}~_]+)*@(?:[a-z0-9-]+\\.)+[a-z]{2,6}$";

@@ -15,12 +15,12 @@ public class SportmateApplication extends SpringBootServletInitializer {
 		return "Spring is here";
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		SpringApplication.run(SportmateApplication.class, args);
 	}
 
 	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder){
+	protected SpringApplicationBuilder configure(final SpringApplicationBuilder builder){
 		return builder.sources(SportmateApplication.class);
 	}
 

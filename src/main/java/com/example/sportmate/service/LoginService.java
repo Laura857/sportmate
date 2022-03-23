@@ -24,7 +24,6 @@ import java.util.List;
 
 import static com.example.sportmate.mapper.UsersMapper.buildUsers;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -45,7 +44,7 @@ public class LoginService {
             saveAllHobbies(signingRequest, userSaved);
             saveAllFavoriteSports(signingRequest, userSaved);
             return login(signingRequest.login());
-        } catch (Exception exception) {
+        } catch (final Exception exception) {
             if (nonNull(exception.getCause()) && exception.getCause().toString().contains("duplicate key value violates unique constraint \"users_email_key\"")) {
                 throw new AuthenticationException("Un compte existe déjà pour cette adresse email.");
             }
@@ -72,7 +71,7 @@ public class LoginService {
     private void saveAllHobbies(final SigningRequestDto signingRequest, final Users userSaved) {
         signingRequest.hobbies()
                 .forEach(hobbies -> {
-                            Hobbies hobbiesFound = hobbiesRepository.findByLabel(hobbies)
+                            final Hobbies hobbiesFound = hobbiesRepository.findByLabel(hobbies)
                                     .orElseThrow(() -> new NotFoundException("Inscription erreur : hobbies non trouvé"));
                             userHobbiesRepository.save(userSaved.id(), hobbiesFound.id());
                         }
@@ -94,7 +93,7 @@ public class LoginService {
 
     public String getJWTToken(final String username) {
         final String secretKey = "mySecretKey";
-        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+        final List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
 
         return Jwts
@@ -104,7 +103,7 @@ public class LoginService {
                 .claim("authorities",
                         grantedAuthorities.stream()
                                 .map(GrantedAuthority::getAuthority)
-                                .collect(toList()))
+                                .toList())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 600000))
                 .signWith(SignatureAlgorithm.HS512,

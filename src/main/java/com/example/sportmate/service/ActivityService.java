@@ -15,7 +15,7 @@ import com.example.sportmate.repository.SportRepository;
 import com.example.sportmate.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,91 +29,86 @@ import static com.example.sportmate.mapper.ActivityMapper.buildActivity;
 import static com.example.sportmate.mapper.ActivityMapper.buildActivityResponseDto;
 
 @Service
+@AllArgsConstructor
 public class ActivityService {
+    static final String SPORT_NOT_FOUND_MESSAGE = "Sport non trouvé";
+    static final String LEVEL_NOT_FOUND_MESSAGE = "Niveau non trouvé";
+    static final String USER_NOT_FOUND_MESSAGE = "Utilisateur non trouvé";
+
     private final ActivityRepository activityRepository;
     private final UsersRepository usersRepository;
     private final SportRepository sportRepository;
     private final LevelRepository levelRepository;
 
-    @Autowired
-    public ActivityService(final ActivityRepository activityRepository,
-                           final UsersRepository usersRepository,
-                           final SportRepository sportRepository,
-                           final LevelRepository levelRepository) {
-        this.activityRepository = activityRepository;
-        this.usersRepository = usersRepository;
-        this.sportRepository = sportRepository;
-        this.levelRepository = levelRepository;
-    }
-
-    public ResponseEntity<ResponseDefaultDto> deleteActivity(Integer id){
+    public ResponseEntity<ResponseDefaultDto> deleteActivity(final Integer id){
         activityRepository.deleteById(id);
         return new ResponseEntity<>(new ResponseDefaultDto("Activité " + id +" supprimé"), HttpStatus.OK);
     }
 
-    public ActivityResponseDto createActivity(ActivityRequestDto activityRequestDto, String token){
-        Sport sport = sportRepository.findByLabel(activityRequestDto.sport())
-                .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
-        Level level = levelRepository.findByLabel(activityRequestDto.activityLevel())
-                .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
-        Users user = usersRepository.findByEmail(findEmailInToken(token))
-                .orElseThrow(() -> new NotFoundException("Utilisteur non trouvé"));
-        Activity activityToSave = buildActivity(activityRequestDto, user, sport, level);
-        Activity activitySaved = activityRepository.save(activityToSave);
+    public ActivityResponseDto createActivity(final ActivityRequestDto activityRequestDto, final String token){
+        final Sport sport = sportRepository.findByLabel(activityRequestDto.sport())
+                .orElseThrow(()-> new NotFoundException(SPORT_NOT_FOUND_MESSAGE));
+        final Level level = levelRepository.findByLabel(activityRequestDto.activityLevel())
+                .orElseThrow(()-> new NotFoundException(LEVEL_NOT_FOUND_MESSAGE));
+        final Users user = usersRepository.findByEmail(findEmailInToken(token))
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_MESSAGE));
+        final Activity activityToSave = buildActivity(activityRequestDto, user, sport, level);
+        final Activity activitySaved = activityRepository.save(activityToSave);
         return buildActivityResponseDto(activitySaved, sport, level);
 
     }
 
-    public ActivityResponseDto getActivity(Integer id){
-        Activity activity = activityRepository.findById(id)
+    public ActivityResponseDto getActivity(final Integer id){
+        final Activity activity = activityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Auncune activité trouvée avec l'id " + id));
-        Sport sport = sportRepository.findById(activity.sport())
-                .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
-        Level level = levelRepository.findById(activity.activityLevel())
-                .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
+        final Sport sport = sportRepository.findById(activity.sport())
+                .orElseThrow(()-> new NotFoundException(SPORT_NOT_FOUND_MESSAGE));
+        final Level level = levelRepository.findById(activity.activityLevel())
+                .orElseThrow(()-> new NotFoundException(LEVEL_NOT_FOUND_MESSAGE));
         return buildActivityResponseDto(activity, sport, level);
     }
 
     public List<ActivityResponseDto> getAllActivities(){
-        List<Activity> allActivitiesFind = (List<Activity>) activityRepository.findAll();
+        final List<Activity> allActivitiesFind = (List<Activity>) activityRepository.findAll();
         return buildActivityResponseSortByDate(allActivitiesFind);
     }
 
-    private List<ActivityResponseDto> buildActivityResponseSortByDate(List<Activity> allActivitiesFind) {
-        List<ActivityResponseDto> activityResponse = new ArrayList<>();
+    private List<ActivityResponseDto> buildActivityResponseSortByDate(final List<Activity> allActivitiesFind) {
+        final List<ActivityResponseDto> activityResponse = new ArrayList<>();
         allActivitiesFind.forEach(activity -> {
-            Sport sport = sportRepository.findById(activity.sport())
-                    .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
-            Level level = levelRepository.findById(activity.activityLevel())
-                    .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
+            final Sport sport = sportRepository.findById(activity.sport())
+                    .orElseThrow(()-> new NotFoundException(SPORT_NOT_FOUND_MESSAGE));
+            final Level level = levelRepository.findById(activity.activityLevel())
+                    .orElseThrow(()-> new NotFoundException(LEVEL_NOT_FOUND_MESSAGE));
             activityResponse.add(buildActivityResponseDto(activity, sport, level));
         });
         activityResponse.sort(new ActivityResponseDto.DateComparator());
         return activityResponse;
     }
 
-    public List<ActivityResponseDto> getUserActivities(String token){
-        List<Activity> activitiesByToken = activityRepository.findActivitiesByEmail(findEmailInToken(token));
+    public List<ActivityResponseDto> getUserActivities(final String token){
+        final List<Activity> activitiesByToken = activityRepository.findActivitiesByEmail(findEmailInToken(token));
         return buildActivityResponseSortByDate(activitiesByToken);
     }
 
-    public ActivityResponseDto updateActivity(ActivityRequestDto activityRequestDto, Integer id, String token){
-        Sport sport = sportRepository.findByLabel(activityRequestDto.sport())
-                .orElseThrow(()-> new NotFoundException("Sport non trouvé"));
-        Level level = levelRepository.findByLabel(activityRequestDto.activityLevel())
-                .orElseThrow(()-> new NotFoundException("Niveau non trouvé"));
-        Users user = usersRepository.findByEmail(findEmailInToken(token))
-                .orElseThrow(() -> new NotFoundException("Utilisteur non trouvé"));
-        Activity activityFind = activityRepository.findById(id)
+    public ActivityResponseDto updateActivity(final ActivityRequestDto activityRequestDto, final Integer id, final String token){
+        final Sport sport = sportRepository.findByLabel(activityRequestDto.sport())
+                .orElseThrow(()-> new NotFoundException(SPORT_NOT_FOUND_MESSAGE));
+        final Level level = levelRepository.findByLabel(activityRequestDto.activityLevel())
+                .orElseThrow(()-> new NotFoundException(LEVEL_NOT_FOUND_MESSAGE));
+        final String email = findEmailInToken(token);
+        final Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_MESSAGE));
+        final Activity activityFind = activityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Auncune activité trouvée avec l'id " + id));
 
-        Activity activityToSave = buildActivity(activityRequestDto, user, sport, level, activityFind.id());
-        Activity activitySaved = activityRepository.save(activityToSave);
+        final Activity activityToSave = buildActivity(activityRequestDto, user, sport, level, activityFind.id());
+        final Activity activitySaved = activityRepository.save(activityToSave);
         return buildActivityResponseDto(activitySaved, sport, level);
     }
 
-    private String findEmailInToken(String token){
-        Claims claims = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(token.replace(PREFIX, "")).getBody();
+    private String findEmailInToken(final String token){
+        final Claims claims = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(token.replace(PREFIX, "")).getBody();
         if (claims.get("authorities") != null) {
             return claims.getSubject();
         }

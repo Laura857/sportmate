@@ -14,22 +14,25 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class HandleApiException extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {NotFoundException.class, NotFoundException.class})
-    protected ResponseEntity<Object> handleNotFoundException(RuntimeException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleNotFoundException(final RuntimeException ex, final WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = {AuthenticationException.class, AuthenticationException.class})
-    protected ResponseEntity<Object> handleAuthenticationException(RuntimeException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleAuthenticationException(final RuntimeException ex, final WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = {InvalidFormatException.class, InvalidFormatException.class})
-    protected ResponseEntity<Object> handleInvalidFormatException(RuntimeException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleInvalidFormatException(final RuntimeException ex, final WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
+                                                                  final HttpHeaders headers,
+                                                                  final HttpStatus status,
+                                                                  final WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

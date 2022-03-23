@@ -22,23 +22,23 @@ class SportRepositoryTest implements DataTest {
 
     @Test
     void findById_should_find_a_new_saved_sport() {
-        int sportSavedId = instantiateAndSaveNewSport();
-        Optional<Sport> sportFind = sportRepository.findById(sportSavedId);
+        final int sportSavedId = instantiateAndSaveNewSport();
+        final Optional<Sport> sportFind = sportRepository.findById(sportSavedId);
         assertThat(sportFind).isPresent();
         assertThat(sportFind.get()).isEqualTo(new Sport(sportSavedId, SPORT_NAME));
     }
 
     @Test
     void findById_should_not_find_an_unsaved_sport() {
-        Optional<Sport> sportFind = sportRepository.findById(-1);
+        final Optional<Sport> sportFind = sportRepository.findById(-1);
         assertThat(sportFind).isEmpty();
     }
 
     @Test
     void findById_should_not_find_a_deleted_sport() {
-        int sportSavedId = instantiateAndSaveNewSport();
+        final int sportSavedId = instantiateAndSaveNewSport();
         sportRepository.deleteById(sportSavedId);
-        Optional<Sport> sportFind = sportRepository.findById(sportSavedId);
+        final Optional<Sport> sportFind = sportRepository.findById(sportSavedId);
         assertThat(sportFind).isEmpty();
     }
 

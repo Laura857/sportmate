@@ -23,15 +23,15 @@ public class UsersRepositoryTest implements DataTest {
 
     @Test
     void findById_should_find_a_new_saved_users() {
-        String uniqueEmailGenerated = generateUniqueEmail();
-        int usersSavedId = instantiateAndSaveNewUsers(uniqueEmailGenerated);
-        Optional<Users> usersFind = usersRepository.findById(usersSavedId);
+        final String uniqueEmailGenerated = generateUniqueEmail();
+        final int usersSavedId = instantiateAndSaveNewUsers(uniqueEmailGenerated);
+        final Optional<Users> usersFind = usersRepository.findById(usersSavedId);
         assertThat(usersFind).isPresent();
         assertThat(usersFind.get()).isEqualTo(new Users(usersSavedId, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null));
     }
 
-    private int instantiateAndSaveNewUsers(String uniqueEmailGenerated) {
+    private int instantiateAndSaveNewUsers(final String uniqueEmailGenerated) {
         final Users users = new Users(null, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null);
         return usersRepository.save(users).id();
@@ -43,15 +43,15 @@ public class UsersRepositoryTest implements DataTest {
 
     @Test
     void findById_should_not_find_an_unsaved_users() {
-        Optional<Users> usersFind = usersRepository.findById(-1);
+        final Optional<Users> usersFind = usersRepository.findById(-1);
         assertThat(usersFind).isEmpty();
     }
 
     @Test
     void findById_should_not_find_a_deleted_users() {
-        int usersSavedId = instantiateAndSaveNewUsers(generateUniqueEmail());
+        final int usersSavedId = instantiateAndSaveNewUsers(generateUniqueEmail());
         usersRepository.deleteById(usersSavedId);
-        Optional<Users> usersFind = usersRepository.findById(usersSavedId);
+        final Optional<Users> usersFind = usersRepository.findById(usersSavedId);
         assertThat(usersFind).isEmpty();
     }
 }

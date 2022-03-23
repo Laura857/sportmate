@@ -13,11 +13,13 @@ import static com.example.sportmate.repository.UsersRepositoryTest.generateUniqu
 
 public interface DataTest {
     String ACTIVITY_NAME = "Cours de natation en pleine air";
+    String TOKEN_WITH_BEARER_PREFIX = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";;
+    String TOKEN_WITHOUT_BEARER_PREFIX = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";;;
     LocalDate ACTIVITY_DATE = LocalDate.now();
     boolean IS_EVENT = false;
-    String ADRESS = "Piscine Monge";
-    String LONGITUDE = "Natation";
-    String LATITUDE = "Natation";
+    String ADDRESS = "Piscine Monge";
+    String LONGITUDE = "123.9302.03230";
+    String LATITUDE = "123.9302.03230";
     Integer PARTICIPANT = 10;
     int LEVEL_ID = 1;
     String CONTACT = "0606060606";
@@ -28,7 +30,6 @@ public interface DataTest {
     String SPORT_NAME = "Natation";
     String HOBBIES = "Cinéma";
     String EMAIL = "test@gmail.com";
-    String TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
     String PASSWORD = "un_mot_de_passe";
     String LAST_NAME = "Pierre";
     String FIRST_NAME = "Dupont";
@@ -46,12 +47,12 @@ public interface DataTest {
 
     static Activity buildActivity() {
         return new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
+                ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
     }
 
-    static Activity buildActivity(Integer id) {
+    static Activity buildActivity(final Integer id) {
         return new Activity(id, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
+                ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
     }
 
     static Sport buildSport(){

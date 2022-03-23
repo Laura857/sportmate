@@ -26,6 +26,8 @@ import static com.example.sportmate.DataTest.buildNewUser;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -75,33 +77,71 @@ class LoginServiceTest implements DataTest {
     }
 
     @Test
-    void signingAndLogin_should_saved_a_new_user() {
-        LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
-        UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
-        SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
-        SigningRequestDto signinRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
+    void signingAndLogin_should_throw_exception_when_email_already_exist_in_database() {
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
+        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
 
-        Users userSaved = new Users(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
+        given(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
+                false, LocalDate.now(), null))).willAnswer( invocation -> { throw new Exception("Error message", new Throwable("duplicate key value violates unique constraint \"users_email_key\"")); });
+
+
+        assertThatThrownBy(() -> loginService.signingAndLogin(signingRequestDto))
+                .hasMessage("Un compte existe déjà pour cette adresse email.")
+                .isInstanceOf(AuthenticationException.class);
+    }
+
+    @Test
+    void signingAndLogin_should_throw_exception_when_signing_failed() {
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
+        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
+
+        when(passwordEncoder.encode(PASSWORD))
+                .thenReturn(PASSWORD);
+
+        given(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
+                false, LocalDate.now(), null))).willAnswer( invocation -> { throw new Exception("Error message"); });
+
+
+        assertThatThrownBy(() -> loginService.signingAndLogin(signingRequestDto))
+                .hasMessage("Error message")
+                .isInstanceOf(AuthenticationException.class);
+    }
+
+    @Test
+    void signingAndLogin_should_saved_a_new_user() {
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
+        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
+
+        when(passwordEncoder.encode(PASSWORD))
+                .thenReturn(PASSWORD);
+
+        final Users userSaved = new Users(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
                 false, LocalDate.now(), null);
         when(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
                 false, LocalDate.now(), null)))
                 .thenReturn(userSaved);
 
-        Hobbies moviesHobbies = new Hobbies(ID, HOBBIES);
+        final Hobbies moviesHobbies = new Hobbies(ID, HOBBIES);
 
         when(hobbiesRepository.findByLabel(HOBBIES))
                 .thenReturn(Optional.of(moviesHobbies));
 
         doNothing().when(userHobbiesRepository).save(userSaved.id(), moviesHobbies.id());
 
-        Sport sport = new Sport(ID, SPORT_NAME);
+        final Sport sport = new Sport(ID, SPORT_NAME);
         when(sportRepository.findByLabel(SPORT_NAME))
                 .thenReturn(Optional.of(sport));
 
-        Level level = new Level(ID, LEVEL_NAME);
+        final Level level = new Level(ID, LEVEL_NAME);
         when(levelRepository.findByLabel(LEVEL_NAME))
                 .thenReturn(Optional.of(level));
         doNothing().when(userFavoriteSportRepository).save(userSaved.id(), sport.id(), level.id());
@@ -111,7 +151,7 @@ class LoginServiceTest implements DataTest {
 
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
-        LoginResponseDto loginResponse = loginService.signingAndLogin(signinRequestDto);
+        final LoginResponseDto loginResponse = loginService.signingAndLogin(signingRequestDto);
         assertThat(loginResponse.email())
                 .isEqualTo(EMAIL);
 
@@ -121,7 +161,7 @@ class LoginServiceTest implements DataTest {
 
     @Test
     void login_should_not_find_user_by_email_and_throw_NotFoundException() {
-        LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
 
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
@@ -132,7 +172,7 @@ class LoginServiceTest implements DataTest {
 
     @Test
     void login_should_find_user_by_email_but_with_wrong_password_so_throw_AuthenticationException() {
-        LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
 
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.of(buildNewUser()));
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(false);
@@ -144,13 +184,13 @@ class LoginServiceTest implements DataTest {
 
     @Test
     void login_should_find_user_and_generate_token() {
-        LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
-        Users users = buildNewUser();
+        final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
+        final Users users = buildNewUser();
 
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.of(users));
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
-        LoginResponseDto loginResponseDto = loginService.login(loginRequestDto);
+        final LoginResponseDto loginResponseDto = loginService.login(loginRequestDto);
         assertThat(loginResponseDto.email()).isEqualTo(users.email());
     }
 }
