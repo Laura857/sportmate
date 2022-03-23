@@ -42,7 +42,7 @@ Via votre IDE lancer le projet, il démarrera sur le port localhost:8080
 
 - Authentification
   - Inscription
-   ```json
+   ```
   curl --location --request GET 'localhost:8080/api/level' \
   --header 'Content-Type: text/plain' \
   --data-raw '{
@@ -72,7 +72,7 @@ Via votre IDE lancer le projet, il démarrera sur le port localhost:8080
   ```
 
   - Connexion
-  ```json
+  ```
   curl --location --request POST 'localhost:8080/api/login' \
   --header 'Content-Type: application/json' \
   --data-raw '{
@@ -82,7 +82,7 @@ Via votre IDE lancer le projet, il démarrera sur le port localhost:8080
   ```
 - Activités
   - Créer une activité
-  ```json
+  ```
     curl --location --request POST 'localhost:8080/api/activity' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDQ2MDY4OTIsImV4cCI6MTY0NDYwNzQ5Mn0.3WUxJH4objgdlvyo6WOWilQojoK2xFqgLTUefN8QI55FXGEIBlRsA9TVSap07VtxFZiHeNYo9rypChyVlHUcQQ' \
   --header 'Content-Type: application/json' \
@@ -100,7 +100,7 @@ Via votre IDE lancer le projet, il démarrera sur le port localhost:8080
     ```
   
   - Modifier une activité
-  ```json
+  ```
     curl --location --request PUT 'localhost:8080/api/activity/32' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDU3MDYyNjAsImV4cCI6MTY0NTcwNjg2MH0.bPMR30mm0tKeHNud4YdPka8oBHf_-gEE9_wBwOhp0CVIQRzD3suUgjXLohO2pNY24-UUDy7a9h1wyt1zf4bfnA' \
   --header 'Content-Type: application/json' \
@@ -117,33 +117,33 @@ Via votre IDE lancer le projet, il démarrera sur le port localhost:8080
     }'
     ```
   - Supprimer une activité
-  ```json
+  ```
   curl --location --request DELETE 'localhost:8080/api/activity/1' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDU3MDYyNjAsImV4cCI6MTY0NTcwNjg2MH0.bPMR30mm0tKeHNud4YdPka8oBHf_-gEE9_wBwOhp0CVIQRzD3suUgjXLohO2pNY24-UUDy7a9h1wyt1zf4bfnA' \
   ```
   - Retourner une activité par id
-  ```json
+  ```
     curl --location --request GET 'localhost:8080/api/activity/1' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDgwMjg3NTMsImV4cCI6MTY0ODAyOTM1M30.0RZ9d4FdDYoEOHxuPIfmZaGqUkJ3C_iKlv0Dnn40h76swSrkxXb_Gyu9hJZ6rTsau7c2Sx232q_3G37XsxtVtA' \
     ```
   - Retourner toutes les activités
-  ```json
+  ```
   curl --location --request GET 'localhost:8080/api/activity/all' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoic3lsdmllQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDgwMjg3NTMsImV4cCI6MTY0ODAyOTM1M30.0RZ9d4FdDYoEOHxuPIfmZaGqUkJ3C_iKlv0Dnn40h76swSrkxXb_Gyu9hJZ6rTsau7c2Sx232q_3G37XsxtVtA' \
   ```
   - Retourner toues les activités d'un utilisateur
-  ```json
+  ```
   curl --location --request GET 'localhost:8080/api/activity/user' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrS--header 'Cookie: JSESSIONID=1A46EBD52A28D651CF1DC0F6417E49F1'
   ```
 - Sports
   - Retourner tous les sports
-  ```json
+  ```
    curl --location --request GET 'localhost:8080/api/sport' \
   ```
 - Niveaux
   - Retourner tous les niveaux
-  ```json
+  ```
    curl --location --request GET 'localhost:8080/api/level' \
   ```
     
