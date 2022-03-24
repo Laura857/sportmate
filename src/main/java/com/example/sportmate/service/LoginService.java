@@ -8,7 +8,7 @@ import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.authentification.login.LoginRequestDto;
 import com.example.sportmate.record.authentification.login.LoginResponseDto;
-import com.example.sportmate.record.authentification.signin.SigningRequestDto;
+import com.example.sportmate.record.authentification.signing.SigningRequestDto;
 import com.example.sportmate.repository.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

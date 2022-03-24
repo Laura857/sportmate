@@ -1,7 +1,7 @@
 package com.example.sportmate.mapper;
 
 import com.example.sportmate.entity.Users;
-import com.example.sportmate.record.authentification.signin.SigningRequestDto;
+import com.example.sportmate.record.authentification.signing.SigningRequestDto;
 import com.example.sportmate.record.user.UserDataDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
