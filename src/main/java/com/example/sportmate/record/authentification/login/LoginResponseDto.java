@@ -7,6 +7,6 @@ public record LoginResponseDto(
         @Schema(example = "test@gmail.com")
         String email,
 
-        @Schema(example = "unMotDePassBienSolide")
+        @Schema(example = "unMotDePasseBienSolide")
         String token) {
 }

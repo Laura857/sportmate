@@ -15,6 +15,6 @@ public record LoginRequestDto(
         String email,
 
         @NotBlank(message = "Le mot de passe est obligatoire.")
-        @Schema(example = "unMotDePassBienSolide")
+        @Schema(example = "unMotDePasseBienSolide")
         String password) {
 }

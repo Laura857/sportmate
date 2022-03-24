@@ -38,7 +38,7 @@ public record UserRequestDto(
 
         @NotBlank(message = "Le numéro de téléphone est obligatoire.")
         @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone ne respecte pas le bon format")
-        @Schema(example = "test@gmail.com")
+        @Schema(example = "0606060606")
         String mobilePhone) {
 }
 
