@@ -1,6 +1,8 @@
 package com.example.sportmate.controller;
 
 import com.example.sportmate.service.SportService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +19,14 @@ public class SportController {
     private final SportService sportService;
 
     @GetMapping(SPORT)
-    private List<String> getAllSports(){
+    @Operation(description = "WS qui récupère tous les sports")
+    private List<String> getAllSports() {
         return sportService.getAllSports();
     }
 
     @GetMapping(USER_SPORT)
-    private List<String> getUserSports(@PathVariable("id") Integer userId){
+    @Operation(description = "WS qui récupère tous les sports d'un utilisateur")
+    private List<String> getUserSports(@Schema(example = "1") @PathVariable("id") final Integer userId) {
         return sportService.getUserSports(userId);
     }
 }
