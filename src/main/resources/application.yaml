@@ -39,3 +39,9 @@ logging:
 
 server:
   port: ${PORT:8080}
+
+springdoc:
+  use-fqn: true
+  swagger-ui:
+    show-extensions: true
+    show-common-extensions: true
