@@ -18,27 +18,27 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(USER_ID)
-    @Operation(description = "WS qui récupère les informations d'un utilisateur")
+    @Operation(summary = "WS qui récupère les informations d'un utilisateur")
     private UserDataDto getUser(@Schema(example = "1") @PathVariable("id") final Integer userId) {
         return userService.getUser(userId);
     }
 
     @PutMapping(USER_ID)
-    @Operation(description = "WS qui met à jour les données peronnelles d'un utilisateur")
+    @Operation(summary = "WS qui met à jour les données peronnelles d'un utilisateur")
     private UserDataDto updateUser(@Schema(example = "1") @PathVariable("id") final Integer userId,
                                    @Valid @RequestBody final UserDataDto userRequest) {
         return userService.updateUser(userId, userRequest);
     }
 
     @PatchMapping(USER_ID)
-    @Operation(description = "WS qui met à jour le mot de passe d'un utilisateur")
+    @Operation(summary = "WS qui met à jour le mot de passe d'un utilisateur")
     private void updatePassword(@Schema(example = "1") @PathVariable("id") final Integer userId,
                                 @Schema(example = "unMotDePasseBienSolide") @RequestParam("password") final String password) {
         userService.updatePassword(userId, password);
     }
 
     @DeleteMapping(USER_ID)
-    @Operation(description = "WS qui supprime un utilisateur")
+    @Operation(summary = "WS qui supprime un utilisateur")
     private void deleteUser(@Schema(example = "1") @PathVariable("id") final Integer userId) {
         userService.deleteUser(userId);
     }

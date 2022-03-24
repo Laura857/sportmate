@@ -18,7 +18,7 @@ public class HobbiesController {
     private final HobbiesService hobbiesService;
 
     @GetMapping(USER_HOBBIES)
-    @Operation(description = "WS qui récupère tous les hobbies d'un utilisateur")
+    @Operation(summary = "WS qui récupère tous les hobbies d'un utilisateur")
     private List<String> getUserHobbies(@Schema(example = "1") @PathVariable("id") final Integer id) {
         return hobbiesService.getUserHobbies(id);
     }
