@@ -1,4 +1,4 @@
-package com.example.sportmate.record.signin;
+package com.example.sportmate.record.authentification.signin;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,18 +1,24 @@
-package com.example.sportmate.record.signin;
+package com.example.sportmate.record.user;
 
-import com.example.sportmate.enumeration.Genre;
+import com.example.sportmate.enumeration.GenreEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
-import static com.example.sportmate.record.Regex.LOCAL_DATE;
-import static com.example.sportmate.record.Regex.MOBILE_PHONE;
+import static com.example.sportmate.record.Regex.*;
 
-public record UserRequestDto(
+public record UserDataDto(
         String profilePicture,
+
+        boolean consents,
+
+        @NotBlank(message = "L'email est obligatoire.")
+        @Pattern(regexp = EMAIL, message = "L'email ne respecte pas le bon format")
+        String email,
 
         @NotBlank(message = "Le nom est obligatoire.")
         String lastName,
@@ -21,7 +27,7 @@ public record UserRequestDto(
         String firstName,
 
         @NotNull(message = "Le genre est obligatoire.")
-        Genre genre,
+        GenreEnum genre,
 
         @NotNull(message = "La date d'anniversaire est obligatoire.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE)

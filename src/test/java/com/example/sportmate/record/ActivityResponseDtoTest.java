@@ -1,6 +1,7 @@
 package com.example.sportmate.record;
 
 import com.example.sportmate.DataTest;
+import com.example.sportmate.record.activity.ActivityResponseDto;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

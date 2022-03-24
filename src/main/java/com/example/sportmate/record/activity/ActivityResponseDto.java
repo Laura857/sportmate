@@ -1,4 +1,4 @@
-package com.example.sportmate.record;
+package com.example.sportmate.record.activity;
 
 import java.time.LocalDate;
 import java.util.Comparator;

@@ -1,8 +1,8 @@
 package com.example.sportmate.controller;
 
-import com.example.sportmate.record.LoginRequestDto;
-import com.example.sportmate.record.LoginResponseDto;
-import com.example.sportmate.record.signin.SigningRequestDto;
+import com.example.sportmate.record.authentification.login.LoginRequestDto;
+import com.example.sportmate.record.authentification.login.LoginResponseDto;
+import com.example.sportmate.record.authentification.signin.SigningRequestDto;
 import com.example.sportmate.service.LoginService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

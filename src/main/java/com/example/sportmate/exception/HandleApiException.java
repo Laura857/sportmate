@@ -18,6 +18,11 @@ public class HandleApiException extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(value = {BadRequestException.class, BadRequestException.class})
+    protected ResponseEntity<Object> handleBadRequestException(final RuntimeException ex, final WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @ExceptionHandler(value = {AuthenticationException.class, AuthenticationException.class})
     protected ResponseEntity<Object> handleAuthenticationException(final RuntimeException ex, final WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);

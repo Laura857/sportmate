@@ -1,6 +1,6 @@
-package com.example.sportmate.record.signin;
+package com.example.sportmate.record.authentification.signin;
 
-import com.example.sportmate.record.LoginRequestDto;
+import com.example.sportmate.record.authentification.login.LoginRequestDto;
 
 import javax.validation.Valid;
 import java.util.List;

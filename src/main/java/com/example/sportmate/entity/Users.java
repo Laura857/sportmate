@@ -1,6 +1,7 @@
 package com.example.sportmate.entity;
 
-import com.example.sportmate.enumeration.Genre;
+import com.example.sportmate.enumeration.GenreEnum;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotBlank;
@@ -30,7 +31,7 @@ public record Users(
         String profilePicture,
 
         @NotNull(message = "Le genre est obligatoire.")
-        Genre genre,
+        GenreEnum genre,
 
         LocalDate birthday,
 

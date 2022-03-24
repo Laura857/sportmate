@@ -4,8 +4,8 @@ import com.example.sportmate.entity.Activity;
 import com.example.sportmate.entity.Level;
 import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
-import com.example.sportmate.record.ActivityRequestDto;
-import com.example.sportmate.record.ActivityResponseDto;
+import com.example.sportmate.record.activity.ActivityRequestDto;
+import com.example.sportmate.record.activity.ActivityResponseDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -4,17 +4,20 @@ import com.example.sportmate.entity.Activity;
 import com.example.sportmate.entity.Level;
 import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
-import com.example.sportmate.enumeration.Genre;
+import com.example.sportmate.enumeration.GenreEnum;
+import com.example.sportmate.record.user.UserDataDto;
 
 import java.time.LocalDate;
 
-import static com.example.sportmate.enumeration.Genre.FEMME;
+import static com.example.sportmate.enumeration.GenreEnum.FEMME;
 import static com.example.sportmate.repository.UsersRepositoryTest.generateUniqueEmail;
 
 public interface DataTest {
     String ACTIVITY_NAME = "Cours de natation en pleine air";
-    String TOKEN_WITH_BEARER_PREFIX = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";;
-    String TOKEN_WITHOUT_BEARER_PREFIX = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";;;
+    String TOKEN_WITH_BEARER_PREFIX = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
+    ;
+    String TOKEN_WITHOUT_BEARER_PREFIX = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
+    ;;
     LocalDate ACTIVITY_DATE = LocalDate.now();
     boolean IS_EVENT = false;
     String ADDRESS = "Piscine Monge";
@@ -30,12 +33,14 @@ public interface DataTest {
     String SPORT_NAME = "Natation";
     String HOBBIES = "Cinéma";
     String EMAIL = "test@gmail.com";
+    String EMAIL_OTHER = "other@gmail.com";
     String PASSWORD = "un_mot_de_passe";
+    String PASSWORD_OTHER = "un_mot_de_passe0bis";
     String LAST_NAME = "Pierre";
     String FIRST_NAME = "Dupont";
     String MOBILE = "0606060606";
     String PROFILE_PICTURE = "Natation";
-    Genre GENRE = FEMME;
+    GenreEnum GENRE = FEMME;
     boolean CONSENTS = false;
     LocalDate BIRTHDAY = LocalDate.now();
     Integer ID = 1;
@@ -43,6 +48,35 @@ public interface DataTest {
     static Users buildNewUser() {
         return new Users(null, generateUniqueEmail(), PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null);
+    }
+
+    static UserDataDto buildDefaultUserData() {
+        return new UserDataDto(
+                PROFILE_PICTURE,
+                CONSENTS,
+                EMAIL,
+                LAST_NAME,
+                FIRST_NAME,
+                GENRE,
+                BIRTHDAY,
+                MOBILE);
+    }
+
+    static UserDataDto buildDefaultUserData(final String email) {
+        return new UserDataDto(
+                PROFILE_PICTURE,
+                CONSENTS,
+                email,
+                LAST_NAME,
+                FIRST_NAME,
+                GENRE,
+                BIRTHDAY,
+                MOBILE);
+    }
+
+    static Users buildNewUserDefault() {
+        return new Users(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
+                CONSENTS, LocalDate.now(), null);
     }
 
     static Activity buildActivity() {
@@ -55,11 +89,11 @@ public interface DataTest {
                 ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
     }
 
-    static Sport buildSport(){
-       return new Sport(null, SPORT_NAME);
+    static Sport buildSport() {
+        return new Sport(null, SPORT_NAME);
     }
 
-    static Level buildLevel(){
-       return new Level(null, LEVEL_NAME);
+    static Level buildLevel() {
+        return new Level(null, LEVEL_NAME);
     }
 }

@@ -7,11 +7,11 @@ import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
 import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
-import com.example.sportmate.record.LoginRequestDto;
-import com.example.sportmate.record.LoginResponseDto;
-import com.example.sportmate.record.signin.SigningRequestDto;
-import com.example.sportmate.record.signin.SportRequestDto;
-import com.example.sportmate.record.signin.UserRequestDto;
+import com.example.sportmate.record.authentification.login.LoginRequestDto;
+import com.example.sportmate.record.authentification.login.LoginResponseDto;
+import com.example.sportmate.record.authentification.signin.SigningRequestDto;
+import com.example.sportmate.record.authentification.signin.SportRequestDto;
+import com.example.sportmate.record.authentification.signin.UserRequestDto;
 import com.example.sportmate.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.example.sportmate.DataTest.buildNewUser;
+import static com.example.sportmate.DataTest.buildNewUserDefault;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -79,7 +80,7 @@ class LoginServiceTest implements DataTest {
     @Test
     void signingAndLogin_should_throw_exception_when_email_already_exist_in_database() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
-        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
         final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
         final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
 
@@ -98,7 +99,7 @@ class LoginServiceTest implements DataTest {
     @Test
     void signingAndLogin_should_throw_exception_when_signing_failed() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
-        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
         final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
         final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
 
@@ -117,15 +118,14 @@ class LoginServiceTest implements DataTest {
     @Test
     void signingAndLogin_should_saved_a_new_user() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
-        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
         final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
         final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
 
-        final Users userSaved = new Users(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
-                false, LocalDate.now(), null);
+        final Users userSaved = buildNewUserDefault();
         when(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
                 false, LocalDate.now(), null)))
                 .thenReturn(userSaved);

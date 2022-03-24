@@ -1,7 +1,7 @@
 package com.example.sportmate.controller;
 
-import com.example.sportmate.record.ActivityRequestDto;
-import com.example.sportmate.record.ActivityResponseDto;
+import com.example.sportmate.record.activity.ActivityRequestDto;
+import com.example.sportmate.record.activity.ActivityResponseDto;
 import com.example.sportmate.record.ResponseDefaultDto;
 import com.example.sportmate.service.ActivityService;
 import lombok.AllArgsConstructor;

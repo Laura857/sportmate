@@ -33,6 +33,15 @@ class HandleApiExceptionTest {
     }
 
     @Test
+    void handleBadRequestException(){
+        final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        final ServletWebRequest servletWebRequest = new ServletWebRequest(servletRequest);
+
+        assertThat(handleApiException.handleBadRequestException(new RuntimeException("Error"), servletWebRequest))
+                .isEqualTo(new ResponseEntity<>("Error", BAD_REQUEST));
+    }
+
+    @Test
     void handleAuthenticationException(){
         final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
         final ServletWebRequest servletWebRequest = new ServletWebRequest(servletRequest);
