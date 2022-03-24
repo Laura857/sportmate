@@ -1,5 +1,6 @@
 package com.example.sportmate.config;
 
+import com.example.sportmate.exception.AuthenticationException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +19,7 @@ import java.util.List;
 @Service
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
-    static final String HEADER = "Authorization";
+    public static final String HEADER = "Authorization";
     public static final String PREFIX = "Bearer ";
     public static final String SECRET = "mySecretKey";
 
@@ -68,5 +69,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     boolean checkJWTToken(final HttpServletRequest request) {
         final String authenticationHeader = request.getHeader(HEADER);
         return authenticationHeader != null && authenticationHeader.startsWith(PREFIX);
+    }
+
+    public String findEmailInToken(final String token){
+        final Claims claims = Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(token.replace(PREFIX, "")).getBody();
+        if (claims.get("authorities") != null) {
+            return claims.getSubject();
+        }
+        throw new AuthenticationException("Impossible de récupérer le mail dans le token");
     }
 }

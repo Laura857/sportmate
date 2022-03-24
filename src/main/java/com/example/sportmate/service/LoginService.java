@@ -1,5 +1,6 @@
 package com.example.sportmate.service;
 
+import com.example.sportmate.config.JWTAuthorizationFilter;
 import com.example.sportmate.entity.Hobbies;
 import com.example.sportmate.entity.Level;
 import com.example.sportmate.entity.Sport;
@@ -13,15 +14,20 @@ import com.example.sportmate.repository.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.sportmate.config.JWTAuthorizationFilter.HEADER;
 import static com.example.sportmate.mapper.UsersMapper.buildUsers;
 import static java.util.Objects.nonNull;
 
@@ -36,6 +42,18 @@ public class LoginService {
     private final LevelRepository levelRepository;
     private final UserFavoriteSportRepository userFavoriteSportRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JWTAuthorizationFilter jwtAuthorizationFilter;
+
+    private static String getClientIp(final HttpServletRequest request) {
+        String remoteAddr = "";
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+        return remoteAddr;
+    }
 
     @Transactional
     public LoginResponseDto signingAndLogin(final SigningRequestDto signingRequest) {
@@ -91,7 +109,7 @@ public class LoginService {
         return !passwordEncoder.matches(loginRequestDto.password(), user.password());
     }
 
-    public String getJWTToken(final String username) {
+    public String getJWTToken(final String username, final Date expirationDate) {
         final String secretKey = "mySecretKey";
         final List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
@@ -105,9 +123,24 @@ public class LoginService {
                                 .map(GrantedAuthority::getAuthority)
                                 .toList())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .setExpiration(nonNull(expirationDate) ? expirationDate : new Date(System.currentTimeMillis() + 600000))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
     }
+
+    public String getJWTToken(final String username) {
+        return getJWTToken(username, null);
+    }
+
+    public void logout(final HttpServletRequest request) {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            final String emailInToken = jwtAuthorizationFilter.findEmailInToken(request.getHeader(HEADER));
+            getJWTToken(emailInToken, new Date(System.currentTimeMillis()-1));
+            wts.parser().setSigningKey(key).parseClaimsJws(compact).getBody().setExpiration(expirationTime1).getSubject();
+        }
+    }
+
+
 }
 
