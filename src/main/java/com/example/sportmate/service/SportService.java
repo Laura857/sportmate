@@ -19,4 +19,11 @@ public class SportService {
                 .map(Sport::label)
                 .toList();
     }
+
+    public List<String> getUserSports(final Integer userId) {
+        return sportRepository.findUserSports(userId).stream()
+                .map(Sport::label)
+                .toList();
+    }
+
 }

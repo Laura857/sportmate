@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class LevelController {
-    private static final String LEVEL = "api/level";
+    private static final String LEVEL = "api/levels";
 
     private final LevelService levelService;
 
