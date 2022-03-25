@@ -5,6 +5,8 @@ import com.example.sportmate.entity.Level;
 import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
 import com.example.sportmate.enumeration.GenreEnum;
+import com.example.sportmate.record.activity.ActivityRequestDto;
+import com.example.sportmate.record.authentification.signing.UserRequestDto;
 import com.example.sportmate.record.user.UserDataDto;
 
 import java.time.LocalDate;
@@ -34,7 +36,7 @@ public interface DataTest {
     String HOBBIES = "Cinéma";
     String EMAIL = "test@gmail.com";
     String EMAIL_OTHER = "other@gmail.com";
-    String PASSWORD = "un_mot_de_passe";
+    String PASSWORD = "unM@t2PasseS0lid3";
     String PASSWORD_OTHER = "un_mot_de_passe0bis";
     String LAST_NAME = "Pierre";
     String FIRST_NAME = "Dupont";
@@ -96,4 +98,14 @@ public interface DataTest {
     static Level buildLevel() {
         return new Level(null, LEVEL_NAME);
     }
+
+    static ActivityRequestDto buildDefaultActivityRequest() {
+        return new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+    }
+
+    static UserRequestDto buildDefaultUserRequest() {
+        return new UserRequestDto(PROFILE_PICTURE, CONSENTS, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+    }
+
 }

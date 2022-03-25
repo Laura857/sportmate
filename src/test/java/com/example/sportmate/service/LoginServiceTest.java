@@ -22,8 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.example.sportmate.DataTest.buildNewUser;
-import static com.example.sportmate.DataTest.buildNewUserDefault;
+import static com.example.sportmate.DataTest.*;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -118,7 +117,7 @@ class LoginServiceTest implements DataTest {
     @Test
     void signingAndLogin_should_saved_a_new_user() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
-        final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
+        final UserRequestDto userRequestDto = buildDefaultUserRequest();
         final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
         final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
 

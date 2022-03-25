@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+
+import static com.example.sportmate.record.Regex.PASSWORD;
 
 @RestController
 @AllArgsConstructor
@@ -33,7 +36,7 @@ public class UserController {
     @PatchMapping(USER_ID)
     @Operation(summary = "WS qui met à jour le mot de passe d'un utilisateur")
     private void updatePassword(@Schema(example = "1") @PathVariable("id") final Integer userId,
-                                @Schema(example = "unMotDePasseBienSolide") @RequestParam("password") final String password) {
+                                @Schema(example = "unMotDePasseBienSolide") @Pattern(regexp = PASSWORD, message = "Le mot de passe ne respecte pas le bon format") @RequestParam("password") final String password) {
         userService.updatePassword(userId, password);
     }
 

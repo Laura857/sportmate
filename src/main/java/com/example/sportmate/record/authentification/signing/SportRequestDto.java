@@ -1,7 +1,5 @@
 package com.example.sportmate.record.authentification.signing;
 
-import com.example.sportmate.enumeration.LevelEnum;
-import com.example.sportmate.enumeration.SportEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotBlank;

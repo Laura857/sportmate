@@ -2,5 +2,11 @@ package com.example.sportmate.entity;
 
 import org.springframework.data.annotation.Id;
 
-public record Sport(@Id Integer id, String label) {
+import javax.validation.constraints.NotBlank;
+
+public record Sport(
+        @Id Integer id,
+
+        @NotBlank(message = "Le label est obligatoire.")
+        String label) {
 }

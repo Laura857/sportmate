@@ -20,7 +20,7 @@ public record UserDataDto(
         boolean consents,
 
         @NotBlank(message = "L'email est obligatoire.")
-        @Pattern(regexp = EMAIL, message = "L'email ne respecte pas le bon format")
+        @Pattern(regexp = EMAIL, message = "L'email ne respecte pas le bon format.")
         @Schema(example = "test@gmail.com")
         String email,
 
@@ -41,7 +41,7 @@ public record UserDataDto(
         LocalDate birthday,
 
         @NotBlank(message = "Le numéro de téléphone est obligatoire.")
-        @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone ne respecte pas le bon format")
+        @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone ne respecte pas le bon format.")
         @Schema(example = "0606060606")
         String mobilePhone) {
 }

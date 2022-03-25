@@ -31,13 +31,12 @@ public record UserRequestDto(
         @NotNull(message = "Le genre est obligatoire.")
         GenreEnum genre,
 
-        @NotNull(message = "La date d'anniversaire est obligatoire.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE)
         @Schema(example = "2021-10-10")
         LocalDate birthday,
 
         @NotBlank(message = "Le numéro de téléphone est obligatoire.")
-        @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone ne respecte pas le bon format")
+        @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone ne respecte pas le bon format.")
         @Schema(example = "0606060606")
         String mobilePhone) {
 }
