@@ -1,43 +1,47 @@
 package com.example.sportmate.exception;
 
+import com.example.sportmate.record.ErrorResponse;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
-public class HandleApiException extends ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(value = {NotFoundException.class, NotFoundException.class})
-    protected ResponseEntity<Object> handleNotFoundException(final RuntimeException ex, final WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+public class HandleApiException {
+    @ExceptionHandler(value = NotFoundException.class)
+    protected ResponseEntity<Object> handleNotFoundException(final NotFoundException exception) {
+        final ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {BadRequestException.class, BadRequestException.class})
-    protected ResponseEntity<Object> handleBadRequestException(final RuntimeException ex, final WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler(value = BadRequestException.class)
+    protected ResponseEntity<Object> handleBadRequestException(final BadRequestException exception) {
+        final ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {AuthenticationException.class, AuthenticationException.class})
-    protected ResponseEntity<Object> handleAuthenticationException(final RuntimeException ex, final WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler(value = AuthenticationException.class)
+    protected ResponseEntity<Object> handleAuthenticationException(final AuthenticationException exception) {
+        final ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {InvalidFormatException.class, InvalidFormatException.class})
-    protected ResponseEntity<Object> handleInvalidFormatException(final RuntimeException ex, final WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler(value = {InvalidFormatException.class, HttpMessageNotReadableException.class})
+    protected ResponseEntity<Object> handleInvalidFormatException(final Exception exception) {
+        final ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, new HttpHeaders(), BAD_REQUEST);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
-                                                                  final HttpHeaders headers,
-                                                                  final HttpStatus status,
-                                                                  final WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException exception) {
+        return new ResponseEntity<>(exception.getBindingResult().getAllErrors().stream()
+                .map(error -> new ErrorResponse(error.getDefaultMessage()))
+                .toList(), new HttpHeaders(), BAD_REQUEST);
     }
 }
