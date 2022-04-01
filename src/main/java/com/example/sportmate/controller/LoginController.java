@@ -5,10 +5,9 @@ import com.example.sportmate.record.authentification.login.LoginResponseDto;
 import com.example.sportmate.record.authentification.signing.SigningRequestDto;
 import com.example.sportmate.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -17,6 +16,7 @@ import javax.validation.Valid;
 public class LoginController {
     private static final String SIGNING_AND_LOGIN = "api/signingAndLogin";
     private static final String LOGIN = "api/login";
+    private static final String EMAIL_EXISTS = "api/email/{email}/exists";
 
     private final LoginService loginService;
 
@@ -30,5 +30,11 @@ public class LoginController {
     @Operation(summary = "Ws de connexion")
     private LoginResponseDto login(@RequestBody @Valid final LoginRequestDto loginRequestDto) {
         return loginService.login(loginRequestDto);
+    }
+
+    @GetMapping(EMAIL_EXISTS)
+    @Operation(summary = "Ws de test d'existance d'un email")
+    private boolean isEmailAlreadyUsedForAnotherAccount(@Schema(example = "test@gmail.com") @PathVariable("email") final String email) {
+        return loginService.isEmailAlreadyUsedForAnotherAccount(email);
     }
 }

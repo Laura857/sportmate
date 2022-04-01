@@ -109,5 +109,9 @@ public class LoginService {
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
     }
+
+    public boolean isEmailAlreadyUsedForAnotherAccount(final String email){
+        return usersRepository.findByEmail(email).isPresent();
+    }
 }
 

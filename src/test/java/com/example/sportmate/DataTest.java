@@ -108,4 +108,9 @@ public interface DataTest {
         return new UserRequestDto(PROFILE_PICTURE, CONSENTS, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
     }
 
+    static Users buildDefaultUsers(){
+        return new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
+                CONSENTS, LocalDate.now(), null);
+    }
+
 }

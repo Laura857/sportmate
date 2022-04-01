@@ -19,11 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.example.sportmate.DataTest.*;
 import static java.util.Collections.singletonList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,8 +87,7 @@ class LoginServiceTest implements DataTest {
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
 
-        given(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
-                false, LocalDate.now(), null))).willAnswer( invocation -> { throw new Exception("Error message", new Throwable("duplicate key value violates unique constraint \"users_email_key\"")); });
+        given(usersRepository.save(buildDefaultUsers())).willAnswer( invocation -> { throw new Exception("Error message", new Throwable("duplicate key value violates unique constraint \"users_email_key\"")); });
 
 
         assertThatThrownBy(() -> loginService.signingAndLogin(signingRequestDto))
@@ -105,8 +105,7 @@ class LoginServiceTest implements DataTest {
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
 
-        given(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
-                false, LocalDate.now(), null))).willAnswer( invocation -> { throw new Exception("Error message"); });
+        given(usersRepository.save(buildDefaultUsers())).willAnswer( invocation -> { throw new Exception("Error message"); });
 
 
         assertThatThrownBy(() -> loginService.signingAndLogin(signingRequestDto))
@@ -125,28 +124,27 @@ class LoginServiceTest implements DataTest {
                 .thenReturn(PASSWORD);
 
         final Users userSaved = buildNewUserDefault();
-        when(usersRepository.save(new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
-                false, LocalDate.now(), null)))
+        when(usersRepository.save(buildDefaultUsers()))
                 .thenReturn(userSaved);
 
         final Hobbies moviesHobbies = new Hobbies(ID, HOBBIES);
 
         when(hobbiesRepository.findByLabel(HOBBIES))
-                .thenReturn(Optional.of(moviesHobbies));
+                .thenReturn(of(moviesHobbies));
 
         doNothing().when(userHobbiesRepository).save(userSaved.id(), moviesHobbies.id());
 
         final Sport sport = new Sport(ID, SPORT_NAME);
         when(sportRepository.findByLabel(SPORT_NAME))
-                .thenReturn(Optional.of(sport));
+                .thenReturn(of(sport));
 
         final Level level = new Level(ID, LEVEL_NAME);
         when(levelRepository.findByLabel(LEVEL_NAME))
-                .thenReturn(Optional.of(level));
+                .thenReturn(of(level));
         doNothing().when(userFavoriteSportRepository).save(userSaved.id(), sport.id(), level.id());
 
         when(usersRepository.findByEmail(EMAIL))
-                .thenReturn(Optional.of(userSaved));
+                .thenReturn(of(userSaved));
 
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
@@ -173,7 +171,7 @@ class LoginServiceTest implements DataTest {
     void login_should_find_user_by_email_but_with_wrong_password_so_throw_AuthenticationException() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
 
-        when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.of(buildNewUser()));
+        when(usersRepository.findByEmail(EMAIL)).thenReturn(of(buildNewUser()));
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(false);
 
         assertThatThrownBy(() -> loginService.login(loginRequestDto))
@@ -186,10 +184,28 @@ class LoginServiceTest implements DataTest {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final Users users = buildNewUser();
 
-        when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.of(users));
+        when(usersRepository.findByEmail(EMAIL)).thenReturn(of(users));
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
         final LoginResponseDto loginResponseDto = loginService.login(loginRequestDto);
         assertThat(loginResponseDto.email()).isEqualTo(users.email());
+    }
+
+    @Test
+    void isEmailAlreadyUsedForAnotherAccount_should_return_false_when_email_already_exists_in_database(){
+        when(usersRepository.findByEmail(EMAIL))
+                .thenReturn(of(buildDefaultUsers()));
+
+        assertThat(loginService.isEmailAlreadyUsedForAnotherAccount(EMAIL))
+                .isTrue();
+    }
+
+    @Test
+    void isEmailAlreadyUsedForAnotherAccount_should_return_true_when_email_not_exists_in_database(){
+        when(usersRepository.findByEmail(EMAIL))
+                .thenReturn(empty());
+
+        assertThat(loginService.isEmailAlreadyUsedForAnotherAccount(EMAIL))
+                .isFalse();
     }
 }
