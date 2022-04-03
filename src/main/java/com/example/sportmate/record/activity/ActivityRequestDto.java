@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static com.example.sportmate.record.Regex.MOBILE_PHONE;
 
@@ -19,16 +19,18 @@ public record ActivityRequestDto(
 
         @NotNull(message = "Le date est obligatoire.")
         @Schema(example = "2021-10-10")
-        LocalDate activityDate,
+        LocalDateTime activityDate,
 
         @NotBlank(message = "L'addresse est obligatoire'.")
         @Schema(example = "16 rue de la Poutre, 75003 Paris")
         String address,
 
-        @Schema(example = "123.023.023")
+        @Schema(example = "123.023.023", required = true)
+        @NotBlank(message = "La longitude est obligatoire.")
         String longitude,
 
-        @Schema(example = "123.023.023")
+        @Schema(example = "123.023.023", required = true)
+        @NotBlank(message = "La latitude est obligatoire.")
         String latitude,
 
         @Schema(example = "3")

@@ -10,6 +10,7 @@ import com.example.sportmate.record.authentification.signing.UserRequestDto;
 import com.example.sportmate.record.user.UserDataDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static com.example.sportmate.enumeration.GenreEnum.FEMME;
 import static com.example.sportmate.repository.UsersRepositoryTest.generateUniqueEmail;
@@ -17,10 +18,8 @@ import static com.example.sportmate.repository.UsersRepositoryTest.generateUniqu
 public interface DataTest {
     String ACTIVITY_NAME = "Cours de natation en pleine air";
     String TOKEN_WITH_BEARER_PREFIX = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
-    ;
     String TOKEN_WITHOUT_BEARER_PREFIX = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
-    ;;
-    LocalDate ACTIVITY_DATE = LocalDate.now();
+    LocalDateTime ACTIVITY_DATE = LocalDateTime.now();
     boolean IS_EVENT = false;
     String ADDRESS = "Piscine Monge";
     String LONGITUDE = "123.9302.03230";
@@ -108,7 +107,7 @@ public interface DataTest {
         return new UserRequestDto(PROFILE_PICTURE, CONSENTS, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
     }
 
-    static Users buildDefaultUsers(){
+    static Users buildDefaultUsers() {
         return new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
                 CONSENTS, LocalDate.now(), null);
     }

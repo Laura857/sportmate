@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +16,7 @@ class ActivityResponseDtoTest implements DataTest  {
 
     @ParameterizedTest
     @MethodSource("compareDate")
-    void compare(final LocalDate otherDate, final int response){
+    void compare(final LocalDateTime otherDate, final int response){
         final ActivityResponseDto activityWithTodayActivityDate = new ActivityResponseDto(ID, IS_EVENT, ACTIVITY_NAME,
                 ACTIVITY_DATE, ID, ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, ACTIVITY_NAME, CONTACT, DESCRIPTION);
 
@@ -29,9 +30,9 @@ class ActivityResponseDtoTest implements DataTest  {
 
     private static Stream<Arguments> compareDate() {
         return Stream.of(
-                Arguments.of(LocalDate.now(), 0),
-                Arguments.of(LocalDate.now().minusDays(1), -1),
-                Arguments.of(LocalDate.now().plusDays(1), 1)
+                Arguments.of(ACTIVITY_DATE, 0),
+                Arguments.of(LocalDateTime.now().minusDays(1), -1),
+                Arguments.of(LocalDateTime.now().plusDays(1), 1)
         );
     }
 

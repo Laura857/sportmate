@@ -3,6 +3,7 @@ package com.example.sportmate.record.activity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 @Schema(description = "Objet de réponse avec les informations d'une activité")
@@ -17,7 +18,7 @@ public record ActivityResponseDto(
         String activityName,
 
         @Schema(example = "2021-10-10")
-        LocalDate activityDate,
+        LocalDateTime activityDate,
 
         @Schema(example = "1")
         Integer creator,

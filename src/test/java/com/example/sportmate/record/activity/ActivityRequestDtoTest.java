@@ -70,6 +70,51 @@ class ActivityRequestDtoTest implements DataTest {
                 .isEqualTo(address);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {" "})
+    @NullAndEmptySource
+    void activityRequestDto_should_throw_exception_when_longitude_is_blank(final String longitude) {
+        final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
+                longitude, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+
+        final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
+
+        assertThat(violations)
+                .hasSize(1);
+
+        final ConstraintViolation<ActivityRequestDto> violation = violations.iterator().next();
+        assertThat(violation.getMessage())
+                .isEqualTo("La longitude est obligatoire.");
+
+        assertThat(violation.getPropertyPath().toString())
+                .hasToString("longitude");
+
+        assertThat(violation.getInvalidValue())
+                .isEqualTo(longitude);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {" "})
+    @NullAndEmptySource
+    void activityRequestDto_should_throw_exception_when_latitude_is_blank(final String latitude) {
+        final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
+                LONGITUDE, latitude, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+
+        final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
+
+        assertThat(violations)
+                .hasSize(1);
+
+        final ConstraintViolation<ActivityRequestDto> violation = violations.iterator().next();
+        assertThat(violation.getMessage())
+                .isEqualTo("La latitude est obligatoire.");
+
+        assertThat(violation.getPropertyPath().toString())
+                .hasToString("latitude");
+
+        assertThat(violation.getInvalidValue())
+                .isEqualTo(latitude);
+    }
     @Test
     void activityRequestDto_should_throw_exception_when_sport_is_null() {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,

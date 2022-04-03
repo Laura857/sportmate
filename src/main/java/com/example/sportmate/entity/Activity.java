@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record Activity(
         @Id Integer id,
@@ -14,7 +15,7 @@ public record Activity(
         String activityName,
 
         @NotNull(message = "Le date est obligatoire.")
-        LocalDate activityDate,
+        LocalDateTime activityDate,
 
         @NotNull(message = "Le créateur est obligatoire.")
         Integer creator,
@@ -22,10 +23,10 @@ public record Activity(
         @NotBlank(message = "L'addresse est obligatoire'.")
         String address,
 
-//        @NotBlank(message = "La longitude est obligatoire.")
+        @NotBlank(message = "La longitude est obligatoire.")
         String longitude,
 
-//        @NotBlank(message = "La latitude est obligatoire.")
+        @NotBlank(message = "La latitude est obligatoire.")
         String latitude,
 
         Integer participant,
