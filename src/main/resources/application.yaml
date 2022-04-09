@@ -40,3 +40,8 @@ logging:
 server:
   port: ${PORT:8080}
 
+api:
+  key:
+    sendinblue: ${API_KEY_SENDINBLUE}
+
+

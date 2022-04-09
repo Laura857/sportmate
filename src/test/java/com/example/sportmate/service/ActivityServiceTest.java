@@ -49,7 +49,7 @@ class ActivityServiceTest implements DataTest {
     private final SportRepository sportRepository;
     @MockBean
     private final LevelRepository levelRepository;
-    private final LoginService loginService;
+    private final AuthService authService;
     @Autowired
     ActivityService activityService;
 
@@ -58,12 +58,12 @@ class ActivityServiceTest implements DataTest {
                                final UsersRepository usersRepository,
                                final SportRepository sportRepository,
                                final LevelRepository levelRepository,
-                               final LoginService loginService) {
+                               final AuthService authService) {
         this.activityRepository = activityRepository;
         this.usersRepository = usersRepository;
         this.sportRepository = sportRepository;
         this.levelRepository = levelRepository;
-        this.loginService = loginService;
+        this.authService = authService;
     }
 
     @Test
@@ -71,7 +71,7 @@ class ActivityServiceTest implements DataTest {
         final ActivityRequestDto activityRequestDto = buildDefaultActivityRequest();
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining(SPORT_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -83,7 +83,7 @@ class ActivityServiceTest implements DataTest {
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining(LEVEL_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -96,7 +96,7 @@ class ActivityServiceTest implements DataTest {
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.of(new Level(null, LEVEL_NAME)));
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.createActivity(activityRequestDto, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining(USER_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -113,7 +113,7 @@ class ActivityServiceTest implements DataTest {
         final Activity activity = DataTest.buildActivity(ID);
         when(activityRepository.save(ActivityMapper.buildActivity(activityRequestDto, user, sport, level))).thenReturn(activity);
 
-        final ActivityResponseDto activitySaved = activityService.createActivity(activityRequestDto, loginService.getJWTToken(EMAIL));
+        final ActivityResponseDto activitySaved = activityService.createActivity(activityRequestDto, authService.getJWTToken(EMAIL));
         assertThat(activitySaved).isEqualTo(buildActivityResponseDto(activity, sport, level));
     }
 
@@ -158,7 +158,7 @@ class ActivityServiceTest implements DataTest {
         when(activityRepository.findActivitiesByEmail(EMAIL)).thenReturn(singletonList(activity));
         when(sportRepository.findById(activity.sport())).thenReturn(Optional.of(sport));
         when(levelRepository.findById(activity.activityLevel())).thenReturn(Optional.of(level));
-        final List<ActivityResponseDto> allActivities = activityService.getUserActivities(loginService.getJWTToken(EMAIL));
+        final List<ActivityResponseDto> allActivities = activityService.getUserActivities(authService.getJWTToken(EMAIL));
         assertThat(allActivities).isEqualTo(singletonList(buildActivityResponseDto(activity, sport, level)));
     }
 
@@ -167,7 +167,7 @@ class ActivityServiceTest implements DataTest {
         final ActivityRequestDto activityRequestDto = buildDefaultActivityRequest();
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining(SPORT_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -179,7 +179,7 @@ class ActivityServiceTest implements DataTest {
         when(sportRepository.findByLabel(SPORT_NAME)).thenReturn(Optional.of(new Sport(null, SPORT_NAME)));
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining(LEVEL_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -192,7 +192,7 @@ class ActivityServiceTest implements DataTest {
         when(levelRepository.findByLabel(LEVEL_NAME)).thenReturn(Optional.of(new Level(null, LEVEL_NAME)));
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining(USER_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -206,7 +206,7 @@ class ActivityServiceTest implements DataTest {
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.of(DataTest.buildNewUser()));
         when(activityRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL)))
+        assertThatThrownBy(() -> activityService.updateActivity(activityRequestDto, ID, authService.getJWTToken(EMAIL)))
                 .hasMessageContaining("Auncune activité trouvée avec l'id " + ID)
                 .isInstanceOf(NotFoundException.class);
     }
@@ -225,7 +225,7 @@ class ActivityServiceTest implements DataTest {
         when(activityRepository.findById(ID)).thenReturn(Optional.of(activity));
         when(activityRepository.save(ActivityMapper.buildActivity(activityRequestDto, user, sport, level, activity.id()))).thenReturn(activity);
 
-        final ActivityResponseDto activitySaved = activityService.updateActivity(activityRequestDto, ID, loginService.getJWTToken(EMAIL));
+        final ActivityResponseDto activitySaved = activityService.updateActivity(activityRequestDto, ID, authService.getJWTToken(EMAIL));
         assertThat(activitySaved).isEqualTo(buildActivityResponseDto(activity, sport, level));
     }
 

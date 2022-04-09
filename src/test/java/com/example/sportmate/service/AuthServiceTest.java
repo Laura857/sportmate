@@ -33,9 +33,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class LoginServiceTest implements DataTest {
+class AuthServiceTest implements DataTest {
     @Autowired
-    private final LoginService loginService;
+    private final AuthService authService;
 
     @MockBean
     private final UsersRepository usersRepository;
@@ -59,15 +59,15 @@ class LoginServiceTest implements DataTest {
     private final UserFavoriteSportRepository userFavoriteSportRepository;
 
     @Autowired
-    LoginServiceTest(final LoginService loginService,
-                     final UsersRepository usersRepository,
-                     final PasswordEncoder passwordEncoder,
-                     final UserHobbiesRepository userHobbiesRepository,
-                     final HobbiesRepository hobbiesRepository,
-                     final SportRepository sportRepository,
-                     final LevelRepository levelRepository,
-                     final UserFavoriteSportRepository userFavoriteSportRepository) {
-        this.loginService = loginService;
+    AuthServiceTest(final AuthService authService,
+                    final UsersRepository usersRepository,
+                    final PasswordEncoder passwordEncoder,
+                    final UserHobbiesRepository userHobbiesRepository,
+                    final HobbiesRepository hobbiesRepository,
+                    final SportRepository sportRepository,
+                    final LevelRepository levelRepository,
+                    final UserFavoriteSportRepository userFavoriteSportRepository) {
+        this.authService = authService;
         this.usersRepository = usersRepository;
         this.passwordEncoder = passwordEncoder;
         this.userHobbiesRepository = userHobbiesRepository;
@@ -90,7 +90,7 @@ class LoginServiceTest implements DataTest {
         given(usersRepository.save(buildDefaultUsers())).willAnswer( invocation -> { throw new Exception("Error message", new Throwable("duplicate key value violates unique constraint \"users_email_key\"")); });
 
 
-        assertThatThrownBy(() -> loginService.signingAndLogin(signingRequestDto))
+        assertThatThrownBy(() -> authService.signingAndLogin(signingRequestDto))
                 .hasMessage("Un compte existe déjà pour cette adresse email.")
                 .isInstanceOf(AuthenticationException.class);
     }
@@ -108,7 +108,7 @@ class LoginServiceTest implements DataTest {
         given(usersRepository.save(buildDefaultUsers())).willAnswer( invocation -> { throw new Exception("Error message"); });
 
 
-        assertThatThrownBy(() -> loginService.signingAndLogin(signingRequestDto))
+        assertThatThrownBy(() -> authService.signingAndLogin(signingRequestDto))
                 .hasMessage("Error message")
                 .isInstanceOf(AuthenticationException.class);
     }
@@ -148,7 +148,7 @@ class LoginServiceTest implements DataTest {
 
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
-        final LoginResponseDto loginResponse = loginService.signingAndLogin(signingRequestDto);
+        final LoginResponseDto loginResponse = authService.signingAndLogin(signingRequestDto);
         assertThat(loginResponse.email())
                 .isEqualTo(EMAIL);
 
@@ -162,7 +162,7 @@ class LoginServiceTest implements DataTest {
 
         when(usersRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> loginService.login(loginRequestDto))
+        assertThatThrownBy(() -> authService.login(loginRequestDto))
                 .hasMessageContaining("Connexion refusée : utilisateur non trouvé")
                 .isInstanceOf(NotFoundException.class);
     }
@@ -174,7 +174,7 @@ class LoginServiceTest implements DataTest {
         when(usersRepository.findByEmail(EMAIL)).thenReturn(of(buildNewUser()));
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(false);
 
-        assertThatThrownBy(() -> loginService.login(loginRequestDto))
+        assertThatThrownBy(() -> authService.login(loginRequestDto))
                 .hasMessageContaining("Le mot de passe est incorrect")
                 .isInstanceOf(AuthenticationException.class);
     }
@@ -187,7 +187,7 @@ class LoginServiceTest implements DataTest {
         when(usersRepository.findByEmail(EMAIL)).thenReturn(of(users));
         when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
-        final LoginResponseDto loginResponseDto = loginService.login(loginRequestDto);
+        final LoginResponseDto loginResponseDto = authService.login(loginRequestDto);
         assertThat(loginResponseDto.email()).isEqualTo(users.email());
     }
 
@@ -196,7 +196,7 @@ class LoginServiceTest implements DataTest {
         when(usersRepository.findByEmail(EMAIL))
                 .thenReturn(of(buildDefaultUsers()));
 
-        assertThat(loginService.isEmailAlreadyUsedForAnotherAccount(EMAIL))
+        assertThat(authService.isEmailAlreadyUsedForAnotherAccount(EMAIL))
                 .isTrue();
     }
 
@@ -205,7 +205,7 @@ class LoginServiceTest implements DataTest {
         when(usersRepository.findByEmail(EMAIL))
                 .thenReturn(empty());
 
-        assertThat(loginService.isEmailAlreadyUsedForAnotherAccount(EMAIL))
+        assertThat(authService.isEmailAlreadyUsedForAnotherAccount(EMAIL))
                 .isFalse();
     }
 }
