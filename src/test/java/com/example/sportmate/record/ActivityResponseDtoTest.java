@@ -31,8 +31,8 @@ class ActivityResponseDtoTest implements DataTest  {
     private static Stream<Arguments> compareDate() {
         return Stream.of(
                 Arguments.of(ACTIVITY_DATE, 0),
-                Arguments.of(LocalDateTime.now().minusDays(1), -1),
-                Arguments.of(LocalDateTime.now().plusDays(1), 1)
+                Arguments.of(ACTIVITY_DATE.minusDays(1), -1),
+                Arguments.of(ACTIVITY_DATE.plusDays(1), 1)
         );
     }
 

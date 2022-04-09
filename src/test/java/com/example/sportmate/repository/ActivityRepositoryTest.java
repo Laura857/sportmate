@@ -27,7 +27,6 @@ class ActivityRepositoryTest implements DataTest {
     void findById_should_find_a_new_saved_activity() {
         final Activity activitySaved = instantiateAndSaveNewActivity();
         final Optional<Activity> activityFind = activityRepository.findById(activitySaved.id());
-        assertThat(activityFind).isPresent();
         assertThat(activityFind).contains(activitySaved);
     }
 

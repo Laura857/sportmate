@@ -19,7 +19,7 @@ public interface DataTest {
     String ACTIVITY_NAME = "Cours de natation en pleine air";
     String TOKEN_WITH_BEARER_PREFIX = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
     String TOKEN_WITHOUT_BEARER_PREFIX = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJzb2Z0dGVrSldUIiwic3ViIjoibGF1cmFAZ21haWwuY29tIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTYzNzk1NTU4OSwiZXhwIjoxNjM3OTU2MTg5fQ.t39C9u6Ydq2jj1Wn2HuMLqUROi2d_0Jj8RHcfpFpvYoT-Xh45aBE7sEbZDwB-fMX7v3iegZgU7nNp2Y2bca2kw";
-    LocalDateTime ACTIVITY_DATE = LocalDateTime.now();
+    LocalDateTime ACTIVITY_DATE = LocalDateTime.of(2022, 1, 12, 13, 10, 2);
     boolean IS_EVENT = false;
     String ADDRESS = "Piscine Monge";
     String LONGITUDE = "123.9302.03230";
