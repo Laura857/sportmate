@@ -8,5 +8,8 @@ public record LoginResponseDto(
         String email,
 
         @Schema(example = "unMotDePasseBienSolide")
-        String token) {
+        String token,
+
+        @Schema(example = "jkl0j-dss9990ds00")
+        Integer userId) {
 }

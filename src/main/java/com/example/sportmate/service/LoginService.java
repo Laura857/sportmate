@@ -84,7 +84,7 @@ public class LoginService {
         if (isPasswordNoMatch(loginRequestDto, user)) {
             throw new AuthenticationException("Le mot de passe est incorrect");
         }
-        return new LoginResponseDto(user.email(), getJWTToken(loginRequestDto.email()));
+        return new LoginResponseDto(user.email(), getJWTToken(loginRequestDto.email()), user.id());
     }
 
     private boolean isPasswordNoMatch(final LoginRequestDto loginRequestDto, final Users user) {

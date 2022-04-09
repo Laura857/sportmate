@@ -152,6 +152,9 @@ class LoginServiceTest implements DataTest {
         assertThat(loginResponse.email())
                 .isEqualTo(EMAIL);
 
+        assertThat(loginResponse.userId())
+                .isEqualTo(ID);
+
         assertThat(loginResponse.token())
                 .isNotBlank();
     }
@@ -189,6 +192,7 @@ class LoginServiceTest implements DataTest {
 
         final LoginResponseDto loginResponseDto = loginService.login(loginRequestDto);
         assertThat(loginResponseDto.email()).isEqualTo(users.email());
+        assertThat(loginResponseDto.userId()).isEqualTo(users.id());
     }
 
     @Test
