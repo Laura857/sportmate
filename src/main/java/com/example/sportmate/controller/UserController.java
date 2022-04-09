@@ -1,5 +1,6 @@
 package com.example.sportmate.controller;
 
+import com.example.sportmate.record.user.UpdatePasswordRequestDto;
 import com.example.sportmate.record.user.UserDataDto;
 import com.example.sportmate.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,15 +9,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-
-import static com.example.sportmate.record.Regex.PASSWORD;
 
 @RestController
 @AllArgsConstructor
 public class UserController {
     private static final String USER = "/api/user";
     private static final String USER_ID = USER + "/{id}";
+    private static final String USER_ID_UPDATE_PASSWORD = USER_ID + "/updatePassword";
 
     private final UserService userService;
 
@@ -33,11 +32,11 @@ public class UserController {
         return userService.updateUser(userId, userRequest);
     }
 
-    @PatchMapping(USER_ID)
+    @PutMapping(USER_ID_UPDATE_PASSWORD)
     @Operation(summary = "WS qui met à jour le mot de passe d'un utilisateur")
     private void updatePassword(@Schema(example = "1") @PathVariable("id") final Integer userId,
-                                @Schema(example = "unMotDePasseBienSolide") @Pattern(regexp = PASSWORD, message = "Le mot de passe ne respecte pas le bon format") @RequestParam("password") final String password) {
-        userService.updatePassword(userId, password);
+                                @Valid @RequestBody final UpdatePasswordRequestDto updatePasswordRequestDto) {
+        userService.updatePassword(userId, updatePasswordRequestDto);
     }
 
     @DeleteMapping(USER_ID)

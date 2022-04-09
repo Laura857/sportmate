@@ -51,7 +51,7 @@ class UserRequestDtoTest implements DataTest {
     @ParameterizedTest
     @ValueSource(strings = {" "})
     @NullAndEmptySource
-    void sportRequestDto_should_throw_exception_when_first_name_is_blank(final String firstName) {
+    void SportDto_should_throw_exception_when_first_name_is_blank(final String firstName) {
         final UserRequestDto userRequest = new UserRequestDto(PROFILE_PICTURE, CONSENTS, LAST_NAME, firstName, GENRE, BIRTHDAY, MOBILE);
 
         final Set<ConstraintViolation<UserRequestDto>> violations = validator.validate(userRequest);
@@ -72,7 +72,7 @@ class UserRequestDtoTest implements DataTest {
     }
 
     @Test
-    void sportRequestDto_should_throw_exception_when_mobile_phone_is_null() {
+    void SportDto_should_throw_exception_when_mobile_phone_is_null() {
         final UserRequestDto userRequest = new UserRequestDto(PROFILE_PICTURE, CONSENTS, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, null);
 
         final Set<ConstraintViolation<UserRequestDto>> violations = validator.validate(userRequest);
@@ -93,7 +93,7 @@ class UserRequestDtoTest implements DataTest {
     }
 
     @Test
-    void sportRequestDto_should_throw_exception_when_mobile_phone_not_respect_regex() {
+    void SportDto_should_throw_exception_when_mobile_phone_not_respect_regex() {
         final UserRequestDto userRequest = new UserRequestDto(PROFILE_PICTURE, CONSENTS, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, "1234");
 
         final Set<ConstraintViolation<UserRequestDto>> violations = validator.validate(userRequest);

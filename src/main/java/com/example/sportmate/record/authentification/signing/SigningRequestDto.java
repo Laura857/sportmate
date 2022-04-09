@@ -12,7 +12,7 @@ public record SigningRequestDto(
 
         @Valid UserRequestDto user,
 
-        @Valid List<SportRequestDto> sports,
+        @Valid List<SportDto> sports,
 
         @Schema(description = "Objet de requête pour l'inscription avec les hobbies l'utilisateur", example = "['Cuisine', 'Cinéma']")
         List<String> hobbies) {

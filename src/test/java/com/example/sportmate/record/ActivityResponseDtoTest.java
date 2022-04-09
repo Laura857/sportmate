@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
@@ -18,10 +17,10 @@ class ActivityResponseDtoTest implements DataTest  {
     @MethodSource("compareDate")
     void compare(final LocalDateTime otherDate, final int response){
         final ActivityResponseDto activityWithTodayActivityDate = new ActivityResponseDto(ID, IS_EVENT, ACTIVITY_NAME,
-                ACTIVITY_DATE, ID, ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, ACTIVITY_NAME, CONTACT, DESCRIPTION);
+                ACTIVITY_DATE, ID, ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, ACTIVITY_NAME, CONTACT, DESCRIPTION);
 
         final ActivityResponseDto otherActivity = new ActivityResponseDto(ID, IS_EVENT, ACTIVITY_NAME,
-                otherDate, ID, ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, ACTIVITY_NAME, CONTACT, DESCRIPTION);
+                otherDate, ID, ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, ACTIVITY_NAME, CONTACT, DESCRIPTION);
 
         final ActivityResponseDto.DateComparator dateComparator = new ActivityResponseDto.DateComparator();
         assertThat(dateComparator.compare(activityWithTodayActivityDate, otherActivity))

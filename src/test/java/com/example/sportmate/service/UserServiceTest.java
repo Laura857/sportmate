@@ -4,6 +4,7 @@ import com.example.sportmate.DataTest;
 import com.example.sportmate.entity.Users;
 import com.example.sportmate.exception.BadRequestException;
 import com.example.sportmate.exception.NotFoundException;
+import com.example.sportmate.record.user.UpdatePasswordRequestDto;
 import com.example.sportmate.record.user.UserDataDto;
 import com.example.sportmate.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
-import static com.example.sportmate.DataTest.*;
+import static com.example.sportmate.DataTest.buildDefaultUserData;
+import static com.example.sportmate.DataTest.buildNewUserDefault;
+import static com.example.sportmate.enumeration.ErrorMessageEnum.PASSWORD_BAD_REQUEST;
 import static com.example.sportmate.enumeration.ErrorMessageEnum.USER_NOT_FOUND;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -33,6 +36,9 @@ class UserServiceTest implements DataTest {
 
     @MockBean
     PasswordEncoder passwordEncoder;
+
+    @MockBean
+    PasswordService passwordService;
 
     @Test
     void getUser_should_throw_exception_when_user_id_not_exists() {
@@ -107,26 +113,45 @@ class UserServiceTest implements DataTest {
         when(usersRepository.findById(ID))
                 .thenReturn(empty());
 
-        assertThatThrownBy(() -> userService.updatePassword(ID, PASSWORD))
+        assertThatThrownBy(() -> userService.updatePassword(ID, new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD)))
                 .hasMessageContaining(USER_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
 
     @Test
-    void updatePassword_should_update_only_user_password_when_user_id_exists() {
+    void updatePassword_should_throw_exception_when_user_old_password_not_match() {
         final Users userFound = buildNewUserDefault();
+
         when(usersRepository.findById(ID))
                 .thenReturn(of(userFound));
 
-        when(passwordEncoder.encode(PASSWORD_OTHER))
-                .thenReturn(PASSWORD_OTHER);
+        when(passwordService.isPasswordNoMatch(userFound.password(), PASSWORD))
+                .thenReturn(true);
 
-        assertDoesNotThrow(() -> userService.updatePassword(ID, PASSWORD_OTHER));
+        assertThatThrownBy(() -> userService.updatePassword(ID, new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD)))
+                .hasMessageContaining(PASSWORD_BAD_REQUEST.getMessage())
+                .isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
+    void updatePassword_should_update_only_user_password_when_user_id_exists() {
+        final Users userFound = buildNewUserDefault();
+
+        when(usersRepository.findById(ID))
+                .thenReturn(of(userFound));
+
+        when(passwordService.isPasswordNoMatch(userFound.password(), PASSWORD))
+                .thenReturn(false);
+
+        when(passwordEncoder.encode(OTHER_PASSWORD))
+                .thenReturn(OTHER_PASSWORD);
+
+        assertDoesNotThrow(() -> userService.updatePassword(ID, new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD)));
 
         final Users userToSaved = new Users(
                 userFound.id(),
                 userFound.email(),
-                PASSWORD_OTHER,
+                OTHER_PASSWORD,
                 userFound.lastName(),
                 userFound.firstName(),
                 userFound.mobile(),

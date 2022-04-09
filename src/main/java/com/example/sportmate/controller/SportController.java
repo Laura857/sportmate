@@ -1,5 +1,6 @@
 package com.example.sportmate.controller;
 
+import com.example.sportmate.record.authentification.signing.SportDto;
 import com.example.sportmate.service.SportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,7 +27,7 @@ public class SportController {
 
     @GetMapping(USER_SPORT)
     @Operation(summary = "WS qui récupère tous les sports d'un utilisateur")
-    private List<String> getUserSports(@Schema(example = "1") @PathVariable("id") final Integer userId) {
+    private List<SportDto> getUserSports(@Schema(example = "1") @PathVariable("id") final Integer userId) {
         return sportService.getUserSports(userId);
     }
 }

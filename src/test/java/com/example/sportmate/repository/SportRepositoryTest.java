@@ -25,7 +25,7 @@ class SportRepositoryTest implements DataTest {
         final int sportSavedId = instantiateAndSaveNewSport();
         final Optional<Sport> sportFind = sportRepository.findById(sportSavedId);
         assertThat(sportFind).isPresent();
-        assertThat(sportFind.get()).isEqualTo(new Sport(sportSavedId, SPORT_NAME));
+        assertThat(sportFind.get()).isEqualTo(new Sport(sportSavedId, SPORT_NAME_SWIM));
     }
 
     @Test
@@ -43,7 +43,7 @@ class SportRepositoryTest implements DataTest {
     }
 
     private int instantiateAndSaveNewSport() {
-        final Sport sport = new Sport(null, SPORT_NAME);
+        final Sport sport = new Sport(null, SPORT_NAME_SWIM);
         return sportRepository.save(sport).id();
     }
 }

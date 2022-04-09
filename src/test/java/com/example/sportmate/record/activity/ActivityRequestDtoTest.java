@@ -29,7 +29,7 @@ class ActivityRequestDtoTest implements DataTest {
     @Test
     void activityRequestDto_should_throw_exception_when_activity_date_is_null() {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, null, ADDRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, CONTACT, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -52,7 +52,7 @@ class ActivityRequestDtoTest implements DataTest {
     @NullAndEmptySource
     void activityRequestDto_should_throw_exception_when_address_is_blank(final String address) {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, address,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, CONTACT, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -75,7 +75,7 @@ class ActivityRequestDtoTest implements DataTest {
     @NullAndEmptySource
     void activityRequestDto_should_throw_exception_when_longitude_is_blank(final String longitude) {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                longitude, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+                longitude, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, CONTACT, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -98,7 +98,7 @@ class ActivityRequestDtoTest implements DataTest {
     @NullAndEmptySource
     void activityRequestDto_should_throw_exception_when_latitude_is_blank(final String latitude) {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                LONGITUDE, latitude, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+                LONGITUDE, latitude, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, CONTACT, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -118,7 +118,7 @@ class ActivityRequestDtoTest implements DataTest {
     @Test
     void activityRequestDto_should_throw_exception_when_sport_is_null() {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, null, LEVEL_NAME, CONTACT, DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, null, LEVEL_NAME_BEGINNING, CONTACT, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -139,7 +139,7 @@ class ActivityRequestDtoTest implements DataTest {
     @Test
     void activityRequestDto_should_throw_exception_when_level_is_null() {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, null, CONTACT, DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, null, CONTACT, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -160,7 +160,7 @@ class ActivityRequestDtoTest implements DataTest {
     @Test
     void activityRequestDto_should_throw_exception_when_contact_is_null() {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, null, DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, null, DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 
@@ -181,7 +181,7 @@ class ActivityRequestDtoTest implements DataTest {
     @Test
     void activityRequestDto_should_throw_exception_when_contact_not_respect_regex() {
         final ActivityRequestDto activityRequest = new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, "1234", DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, "1234", DESCRIPTION);
 
         final Set<ConstraintViolation<ActivityRequestDto>> violations = validator.validate(activityRequest);
 

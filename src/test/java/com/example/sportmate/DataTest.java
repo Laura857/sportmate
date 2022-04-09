@@ -30,13 +30,15 @@ public interface DataTest {
     String DESCRIPTION = "description";
     int SPORT_ID = 1;
     LocalDate CREATED_DATE = LocalDate.now();
-    String LEVEL_NAME = "Débutant";
-    String SPORT_NAME = "Natation";
+    String LEVEL_NAME_BEGINNING = "Débutant";
+    String SPORT_NAME_SWIM = "Natation";
+    String LEVEL_NAME_EXPERT = "Expert";
+    String SPORT_NAME_RUNNING = "Course à pied";
     String HOBBIES = "Cinéma";
     String EMAIL = "test@gmail.com";
     String EMAIL_OTHER = "other@gmail.com";
     String PASSWORD = "unM@t2PasseS0lid3";
-    String PASSWORD_OTHER = "un_mot_de_passe0bis";
+    String OTHER_PASSWORD = "un_mot_de_passe0bis";
     String LAST_NAME = "Pierre";
     String FIRST_NAME = "Dupont";
     String MOBILE = "0606060606";
@@ -45,6 +47,7 @@ public interface DataTest {
     boolean CONSENTS = false;
     LocalDate BIRTHDAY = LocalDate.now();
     Integer ID = 1;
+    Integer ID_2 = 2;
 
     static Users buildNewUser() {
         return new Users(null, generateUniqueEmail(), PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
@@ -91,16 +94,16 @@ public interface DataTest {
     }
 
     static Sport buildSport() {
-        return new Sport(null, SPORT_NAME);
+        return new Sport(null, SPORT_NAME_SWIM);
     }
 
     static Level buildLevel() {
-        return new Level(null, LEVEL_NAME);
+        return new Level(null, LEVEL_NAME_BEGINNING);
     }
 
     static ActivityRequestDto buildDefaultActivityRequest() {
         return new ActivityRequestDto(false, ACTIVITY_NAME, ACTIVITY_DATE, ADDRESS,
-                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME, LEVEL_NAME, CONTACT, DESCRIPTION);
+                LONGITUDE, LATITUDE, PARTICIPANT, SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING, CONTACT, DESCRIPTION);
     }
 
     static UserRequestDto buildDefaultUserRequest() {

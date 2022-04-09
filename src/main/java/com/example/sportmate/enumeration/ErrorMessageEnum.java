@@ -9,7 +9,8 @@ public enum ErrorMessageEnum {
 
     SPORT_NOT_FOUND("Sport non trouvé"),
     LEVEL_NOT_FOUND("Niveau non trouvé"),
-    USER_NOT_FOUND("Utilisateur non trouvé");
+    USER_NOT_FOUND("Utilisateur non trouvé"),
+    PASSWORD_BAD_REQUEST("Le mot de passe est incorrect");
 
     private final String message;
 }

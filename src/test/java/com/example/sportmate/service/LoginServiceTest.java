@@ -10,7 +10,7 @@ import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.authentification.login.LoginRequestDto;
 import com.example.sportmate.record.authentification.login.LoginResponseDto;
 import com.example.sportmate.record.authentification.signing.SigningRequestDto;
-import com.example.sportmate.record.authentification.signing.SportRequestDto;
+import com.example.sportmate.record.authentification.signing.SportDto;
 import com.example.sportmate.record.authentification.signing.UserRequestDto;
 import com.example.sportmate.repository.*;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,6 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -35,54 +34,38 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class LoginServiceTest implements DataTest {
     @Autowired
-    private final LoginService loginService;
+    private LoginService loginService;
 
     @MockBean
-    private final UsersRepository usersRepository;
+    private UsersRepository usersRepository;
 
     @MockBean
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @MockBean
-    private final UserHobbiesRepository userHobbiesRepository;
+    private PasswordService passwordService;
 
     @MockBean
-    private final HobbiesRepository hobbiesRepository;
+    private UserHobbiesRepository userHobbiesRepository;
 
     @MockBean
-    private final SportRepository sportRepository;
+    private HobbiesRepository hobbiesRepository;
 
     @MockBean
-    private final LevelRepository levelRepository;
+    private SportRepository sportRepository;
 
     @MockBean
-    private final UserFavoriteSportRepository userFavoriteSportRepository;
+    private LevelRepository levelRepository;
 
-    @Autowired
-    LoginServiceTest(final LoginService loginService,
-                     final UsersRepository usersRepository,
-                     final PasswordEncoder passwordEncoder,
-                     final UserHobbiesRepository userHobbiesRepository,
-                     final HobbiesRepository hobbiesRepository,
-                     final SportRepository sportRepository,
-                     final LevelRepository levelRepository,
-                     final UserFavoriteSportRepository userFavoriteSportRepository) {
-        this.loginService = loginService;
-        this.usersRepository = usersRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userHobbiesRepository = userHobbiesRepository;
-        this.hobbiesRepository = hobbiesRepository;
-        this.sportRepository = sportRepository;
-        this.levelRepository = levelRepository;
-        this.userFavoriteSportRepository = userFavoriteSportRepository;
-    }
+    @MockBean
+    private UserFavoriteSportRepository userFavoriteSportRepository;
 
     @Test
     void signingAndLogin_should_throw_exception_when_email_already_exist_in_database() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
-        final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
-        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
+        final SportDto sportDto = new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING);
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
@@ -99,8 +82,8 @@ class LoginServiceTest implements DataTest {
     void signingAndLogin_should_throw_exception_when_signing_failed() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
-        final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
-        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
+        final SportDto sportDto = new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING);
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
@@ -117,8 +100,8 @@ class LoginServiceTest implements DataTest {
     void signingAndLogin_should_saved_a_new_user() {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final UserRequestDto userRequestDto = buildDefaultUserRequest();
-        final SportRequestDto sportRequestDto = new SportRequestDto(SPORT_NAME, LEVEL_NAME);
-        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportRequestDto), singletonList(HOBBIES));
+        final SportDto sportDto = new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING);
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
@@ -134,19 +117,19 @@ class LoginServiceTest implements DataTest {
 
         doNothing().when(userHobbiesRepository).save(userSaved.id(), moviesHobbies.id());
 
-        final Sport sport = new Sport(ID, SPORT_NAME);
-        when(sportRepository.findByLabel(SPORT_NAME))
+        final Sport sport = new Sport(ID, SPORT_NAME_SWIM);
+        when(sportRepository.findByLabel(SPORT_NAME_SWIM))
                 .thenReturn(of(sport));
 
-        final Level level = new Level(ID, LEVEL_NAME);
-        when(levelRepository.findByLabel(LEVEL_NAME))
+        final Level level = new Level(ID, LEVEL_NAME_BEGINNING);
+        when(levelRepository.findByLabel(LEVEL_NAME_BEGINNING))
                 .thenReturn(of(level));
         doNothing().when(userFavoriteSportRepository).save(userSaved.id(), sport.id(), level.id());
 
         when(usersRepository.findByEmail(EMAIL))
                 .thenReturn(of(userSaved));
 
-        when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
+        when(passwordService.isPasswordNoMatch(loginRequestDto.password(), PASSWORD)).thenReturn(false);
 
         final LoginResponseDto loginResponse = loginService.signingAndLogin(signingRequestDto);
         assertThat(loginResponse.email())
@@ -175,7 +158,7 @@ class LoginServiceTest implements DataTest {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
 
         when(usersRepository.findByEmail(EMAIL)).thenReturn(of(buildNewUser()));
-        when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(false);
+        when(passwordService.isPasswordNoMatch(loginRequestDto.password(), PASSWORD)).thenReturn(true);
 
         assertThatThrownBy(() -> loginService.login(loginRequestDto))
                 .hasMessageContaining("Le mot de passe est incorrect")
@@ -188,7 +171,7 @@ class LoginServiceTest implements DataTest {
         final Users users = buildNewUser();
 
         when(usersRepository.findByEmail(EMAIL)).thenReturn(of(users));
-        when(passwordEncoder.matches(loginRequestDto.password(), PASSWORD)).thenReturn(true);
+        when(passwordService.isPasswordNoMatch(loginRequestDto.password(), PASSWORD)).thenReturn(false);
 
         final LoginResponseDto loginResponseDto = loginService.login(loginRequestDto);
         assertThat(loginResponseDto.email()).isEqualTo(users.email());

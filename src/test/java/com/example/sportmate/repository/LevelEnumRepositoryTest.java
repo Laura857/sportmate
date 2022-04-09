@@ -25,7 +25,7 @@ class LevelEnumRepositoryTest implements DataTest {
         final int levelSavedId = instantiateAndSaveNewLevel();
         final Optional<Level> levelFind = levelRepository.findById(levelSavedId);
         assertThat(levelFind).isPresent();
-        assertThat(levelFind.get()).isEqualTo(new Level(levelSavedId, LEVEL_NAME));
+        assertThat(levelFind.get()).isEqualTo(new Level(levelSavedId, LEVEL_NAME_BEGINNING));
     }
 
     @Test
@@ -43,7 +43,7 @@ class LevelEnumRepositoryTest implements DataTest {
     }
 
     private int instantiateAndSaveNewLevel() {
-        final Level level = new Level(null, LEVEL_NAME);
+        final Level level = new Level(null, LEVEL_NAME_BEGINNING);
         return levelRepository.save(level).id();
     }
 }

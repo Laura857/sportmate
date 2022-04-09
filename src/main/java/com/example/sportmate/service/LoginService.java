@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.sportmate.enumeration.ErrorMessageEnum.PASSWORD_BAD_REQUEST;
 import static com.example.sportmate.mapper.UsersMapper.buildUsers;
 import static java.util.Objects.nonNull;
 
@@ -36,6 +37,7 @@ public class LoginService {
     private final LevelRepository levelRepository;
     private final UserFavoriteSportRepository userFavoriteSportRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
 
     @Transactional
     public LoginResponseDto signingAndLogin(final SigningRequestDto signingRequest) {
@@ -81,14 +83,10 @@ public class LoginService {
     public LoginResponseDto login(final LoginRequestDto loginRequestDto) {
         final Users user = usersRepository.findByEmail(loginRequestDto.email())
                 .orElseThrow(() -> new NotFoundException("Connexion refusée : utilisateur non trouvé"));
-        if (isPasswordNoMatch(loginRequestDto, user)) {
-            throw new AuthenticationException("Le mot de passe est incorrect");
+        if (passwordService.isPasswordNoMatch(loginRequestDto.password(), user.password())) {
+            throw new AuthenticationException(PASSWORD_BAD_REQUEST.getMessage());
         }
         return new LoginResponseDto(user.email(), getJWTToken(loginRequestDto.email()), user.id());
-    }
-
-    private boolean isPasswordNoMatch(final LoginRequestDto loginRequestDto, final Users user) {
-        return !passwordEncoder.matches(loginRequestDto.password(), user.password());
     }
 
     public String getJWTToken(final String username) {

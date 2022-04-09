@@ -17,6 +17,6 @@ public record LoginRequestDto(
 
         @NotBlank(message = "Le mot de passe est obligatoire.")
         @Pattern(regexp = PASSWORD, message = "Le mot de passe ne respecte pas le bon format.")
-        @Schema(example = "unMotDePasseBienSolide")
+        @Schema(example = "unMot2P@sseBienSolide")
         String password) {
 }
