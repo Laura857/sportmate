@@ -21,13 +21,13 @@ public class SportController {
 
     @GetMapping(SPORT)
     @Operation(summary = "WS qui récupère tous les sports")
-    private List<String> getAllSports() {
+    public List<String> getAllSports() {
         return sportService.getAllSports();
     }
 
     @GetMapping(USER_SPORT)
     @Operation(summary = "WS qui récupère tous les sports d'un utilisateur")
-    private List<SportDto> getUserSports(@Schema(example = "1") @PathVariable("id") final Integer userId) {
+    public List<SportDto> getUserSports(@Schema(example = "1") @PathVariable("id") final Integer userId) {
         return sportService.getUserSports(userId);
     }
 }

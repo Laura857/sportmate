@@ -22,19 +22,19 @@ public class LoginController {
 
     @PostMapping(SIGNING_AND_LOGIN)
     @Operation(summary = "WS d'inscription puis de connexion")
-    private LoginResponseDto signingAndLogin(@RequestBody @Valid final SigningRequestDto signingRequestDto) {
+    public LoginResponseDto signingAndLogin(@RequestBody @Valid final SigningRequestDto signingRequestDto) {
         return loginService.signingAndLogin(signingRequestDto);
     }
 
     @PostMapping(LOGIN)
     @Operation(summary = "Ws de connexion")
-    private LoginResponseDto login(@RequestBody @Valid final LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(@RequestBody @Valid final LoginRequestDto loginRequestDto) {
         return loginService.login(loginRequestDto);
     }
 
     @GetMapping(EMAIL_EXISTS)
     @Operation(summary = "Ws de test d'existance d'un email")
-    private boolean isEmailAlreadyUsedForAnotherAccount(@Schema(example = "test@gmail.com") @PathVariable("email") final String email) {
+    public boolean isEmailAlreadyUsedForAnotherAccount(@Schema(example = "test@gmail.com") @PathVariable("email") final String email) {
         return loginService.isEmailAlreadyUsedForAnotherAccount(email);
     }
 }

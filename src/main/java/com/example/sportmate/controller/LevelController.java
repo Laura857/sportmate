@@ -17,7 +17,7 @@ public class LevelController {
 
     @GetMapping(LEVEL)
     @Operation(summary = "WS qui récupère tous les niveaux")
-    private List<String> getAllLevels() {
+    public List<String> getAllLevels() {
         return levelService.getAllLevels();
     }
 }

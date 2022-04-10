@@ -1,13 +1,13 @@
 package com.example.sportmate.controller;
 
+import com.example.sportmate.record.hobbies.UpdateUserHobbiesDto;
 import com.example.sportmate.service.HobbiesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +19,14 @@ public class HobbiesController {
 
     @GetMapping(USER_HOBBIES)
     @Operation(summary = "WS qui récupère tous les hobbies d'un utilisateur")
-    private List<String> getUserHobbies(@Schema(example = "1") @PathVariable("id") final Integer id) {
-        return hobbiesService.getUserHobbies(id);
+    public List<String> getUserHobbies(@Schema(example = "1") @PathVariable("id") final Integer userId) {
+        return hobbiesService.getUserHobbies(userId);
+    }
+
+    @PutMapping(USER_HOBBIES)
+    @Operation(summary = "WS qui met à jours les hobbies d'un utilisateur")
+    public void updateUserHobbies(@Schema(example = "1") @PathVariable("id") final Integer userId,
+                                  @Valid @RequestBody final UpdateUserHobbiesDto updateUserHobbiesDto) {
+        hobbiesService.updateUserHobbies(userId, updateUserHobbiesDto);
     }
 }

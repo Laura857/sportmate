@@ -10,6 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserHobbiesRepository extends CrudRepository<UserHobbies, Integer> {
     @Modifying
-    @Query(value = "INSERT INTO user_hobbies VALUES (:userId, :hobbiesId, now())")
+    @Query(value = "INSERT INTO user_hobbies VALUES (:userId, :hobbiesId)")
     void save(@Param("userId") int userId, @Param("hobbiesId") int hobbiesId);
+
+    @Modifying
+    @Query(value = "DELETE FROM user_hobbies WHERE user_id = :userId")
+    void deleteAllByUserId(Integer userId);
+
 }

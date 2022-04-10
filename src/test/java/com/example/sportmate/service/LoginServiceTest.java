@@ -65,7 +65,7 @@ class LoginServiceTest implements DataTest {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
         final SportDto sportDto = new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING);
-        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES));
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES_MOVIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
@@ -83,7 +83,7 @@ class LoginServiceTest implements DataTest {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final UserRequestDto userRequestDto = new UserRequestDto(PROFILE_PICTURE, false, LAST_NAME, FIRST_NAME, GENRE, BIRTHDAY, MOBILE);
         final SportDto sportDto = new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING);
-        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES));
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES_MOVIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
@@ -101,7 +101,7 @@ class LoginServiceTest implements DataTest {
         final LoginRequestDto loginRequestDto = new LoginRequestDto(EMAIL, PASSWORD);
         final UserRequestDto userRequestDto = buildDefaultUserRequest();
         final SportDto sportDto = new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING);
-        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES));
+        final SigningRequestDto signingRequestDto = new SigningRequestDto(loginRequestDto, userRequestDto, singletonList(sportDto), singletonList(HOBBIES_MOVIES));
 
         when(passwordEncoder.encode(PASSWORD))
                 .thenReturn(PASSWORD);
@@ -110,9 +110,9 @@ class LoginServiceTest implements DataTest {
         when(usersRepository.save(buildDefaultUsers()))
                 .thenReturn(userSaved);
 
-        final Hobbies moviesHobbies = new Hobbies(ID, HOBBIES);
+        final Hobbies moviesHobbies = new Hobbies(ID, HOBBIES_MOVIES);
 
-        when(hobbiesRepository.findByLabel(HOBBIES))
+        when(hobbiesRepository.findByLabel(HOBBIES_MOVIES))
                 .thenReturn(of(moviesHobbies));
 
         doNothing().when(userHobbiesRepository).save(userSaved.id(), moviesHobbies.id());

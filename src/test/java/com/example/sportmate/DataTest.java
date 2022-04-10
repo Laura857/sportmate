@@ -34,7 +34,8 @@ public interface DataTest {
     String SPORT_NAME_SWIM = "Natation";
     String LEVEL_NAME_EXPERT = "Expert";
     String SPORT_NAME_RUNNING = "Course à pied";
-    String HOBBIES = "Cinéma";
+    String HOBBIES_BOOK = "Livre";
+    String HOBBIES_MOVIES = "Cinéma";
     String EMAIL = "test@gmail.com";
     String EMAIL_OTHER = "other@gmail.com";
     String PASSWORD = "unM@t2PasseS0lid3";
