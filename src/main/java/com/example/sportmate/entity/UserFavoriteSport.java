@@ -4,9 +4,9 @@ import org.springframework.data.annotation.Id;
 
 public record UserFavoriteSport(
         @Id
-        Integer fk_id_user,
+        Integer userId,
 
-        Integer fk_id_sport,
+        Integer sportId,
 
-        Integer fk_id_level) {
+        Integer levelId) {
 }

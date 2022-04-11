@@ -13,8 +13,8 @@ public interface HobbiesRepository extends CrudRepository<Hobbies, Integer> {
     Optional<Hobbies> findByLabel(String label);
 
     @Query("SELECT * FROM hobbies " +
-            "INNER JOIN user_hobbies uh ON hobbies.id = uh.fk_id_hobbies " +
-            "INNER JOIN users u ON uh.fk_id_user = u.id AND u.id = :userId")
+            "INNER JOIN user_hobbies uh ON hobbies.id = uh.hobbies_id " +
+            "INNER JOIN users u ON uh.user_id = u.id AND u.id = :userId")
     List<Hobbies> findUserHobbies(Integer userId);
 
 }

@@ -34,9 +34,9 @@ public class SportService {
     public List<SportDto> getUserSports(final Integer userId) {
         return userFavoriteSportRepository.findUserSports(userId).stream()
                 .map(userFavoriteSport -> {
-                    final Sport sport = sportRepository.findById(userFavoriteSport.fk_id_sport())
+                    final Sport sport = sportRepository.findById(userFavoriteSport.sportId())
                             .orElseThrow(() -> new NotFoundException(SPORT_NOT_FOUND.getMessage()));
-                    final Level level = levelRepository.findById(userFavoriteSport.fk_id_level())
+                    final Level level = levelRepository.findById(userFavoriteSport.levelId())
                             .orElseThrow(() -> new NotFoundException(LEVEL_NOT_FOUND.getMessage()));
                     return new SportDto(sport.label(), level.label());
                 })

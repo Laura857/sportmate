@@ -3,7 +3,7 @@ package com.example.sportmate.entity;
 import org.springframework.data.annotation.Id;
 
 public record UserActivity(
-        @Id Integer fk_id_user,
+        @Id Integer userId,
 
-        Integer fk_id_activity) {
+        Integer activityId) {
 }

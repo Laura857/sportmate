@@ -16,7 +16,7 @@ public interface UserFavoriteSportRepository extends CrudRepository<UserFavorite
     void save(@Param("userId") int userId, @Param("sportId") int sportId, @Param("levelId") int levelId);
 
     @Query("SELECT * FROM user_favorite_sport ufs " +
-            "INNER JOIN sport s ON s.id = ufs.fk_id_sport " +
-            "INNER JOIN users u ON ufs.fk_id_user = u.id AND u.id = :userId")
+            "INNER JOIN sport s ON s.id = ufs.sport_id " +
+            "INNER JOIN users u ON ufs.user_id = u.id AND u.id = :userId")
     List<UserFavoriteSport> findUserSports(Integer userId);
 }
