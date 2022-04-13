@@ -24,14 +24,16 @@ class LevelEnumRepositoryTest implements DataTest {
     void findById_should_find_a_new_saved_level() {
         final int levelSavedId = instantiateAndSaveNewLevel();
         final Optional<Level> levelFind = levelRepository.findById(levelSavedId);
-        assertThat(levelFind).isPresent();
-        assertThat(levelFind.get()).isEqualTo(new Level(levelSavedId, LEVEL_NAME_BEGINNING));
+        assertThat(levelFind)
+                .isPresent()
+                .contains(new Level(levelSavedId, LEVEL_NAME_BEGINNING));
     }
 
     @Test
     void findById_should_not_find_an_unsaved_level() {
         final Optional<Level> levelFind = levelRepository.findById(-1);
-        assertThat(levelFind).isEmpty();
+        assertThat(levelFind)
+                .isEmpty();
     }
 
     @Test
@@ -39,7 +41,8 @@ class LevelEnumRepositoryTest implements DataTest {
         final int levelSavedId = instantiateAndSaveNewLevel();
         levelRepository.deleteById(levelSavedId);
         final Optional<Level> levelFind = levelRepository.findById(levelSavedId);
-        assertThat(levelFind).isEmpty();
+        assertThat(levelFind)
+                .isEmpty();
     }
 
     private int instantiateAndSaveNewLevel() {

@@ -26,8 +26,9 @@ public class UsersRepositoryTest implements DataTest {
         final String uniqueEmailGenerated = generateUniqueEmail();
         final int usersSavedId = instantiateAndSaveNewUsers(uniqueEmailGenerated);
         final Optional<Users> usersFind = usersRepository.findById(usersSavedId);
-        assertThat(usersFind).isPresent();
-        assertThat(usersFind.get()).isEqualTo(new Users(usersSavedId, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
+        assertThat(usersFind)
+                .isPresent()
+                .contains(new Users(usersSavedId, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null));
     }
 
@@ -44,7 +45,8 @@ public class UsersRepositoryTest implements DataTest {
     @Test
     void findById_should_not_find_an_unsaved_users() {
         final Optional<Users> usersFind = usersRepository.findById(-1);
-        assertThat(usersFind).isEmpty();
+        assertThat(usersFind)
+                .isEmpty();
     }
 
     @Test
@@ -52,6 +54,7 @@ public class UsersRepositoryTest implements DataTest {
         final int usersSavedId = instantiateAndSaveNewUsers(generateUniqueEmail());
         usersRepository.deleteById(usersSavedId);
         final Optional<Users> usersFind = usersRepository.findById(usersSavedId);
-        assertThat(usersFind).isEmpty();
+        assertThat(usersFind)
+                .isEmpty();
     }
 }

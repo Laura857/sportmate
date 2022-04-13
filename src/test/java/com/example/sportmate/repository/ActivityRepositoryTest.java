@@ -27,7 +27,8 @@ class ActivityRepositoryTest implements DataTest {
     void findById_should_find_a_new_saved_activity() {
         final Activity activitySaved = instantiateAndSaveNewActivity();
         final Optional<Activity> activityFind = activityRepository.findById(activitySaved.id());
-        assertThat(activityFind).contains(activitySaved);
+        assertThat(activityFind)
+                .contains(activitySaved);
     }
 
     private Activity instantiateAndSaveNewActivity() {
@@ -41,7 +42,8 @@ class ActivityRepositoryTest implements DataTest {
     @Test
     void findById_should_not_find_an_unsaved_activity() {
         final Optional<Activity> activityFind = activityRepository.findById(-1);
-        assertThat(activityFind).isEmpty();
+        assertThat(activityFind)
+                .isEmpty();
     }
 
     @Test
@@ -49,6 +51,7 @@ class ActivityRepositoryTest implements DataTest {
         final Activity activitySaved = instantiateAndSaveNewActivity();
         activityRepository.deleteById(activitySaved.id());
         final Optional<Activity> activityFind = activityRepository.findById(activitySaved.id());
-        assertThat(activityFind).isEmpty();
+        assertThat(activityFind)
+                .isEmpty();
     }
 }

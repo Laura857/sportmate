@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static com.example.sportmate.DataTest.buildDefaultUserData;
-import static com.example.sportmate.enumeration.ErrorMessageEnum.*;
+import static com.example.sportmate.enumeration.ErrorMessageEnum.LEVEL_NOT_FOUND;
+import static com.example.sportmate.enumeration.ErrorMessageEnum.SPORT_NOT_FOUND;
 import static com.example.sportmate.enumeration.SportEnum.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
