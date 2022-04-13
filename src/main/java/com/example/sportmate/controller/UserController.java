@@ -32,16 +32,16 @@ public class UserController {
         return userService.updateUser(userId, userRequest);
     }
 
+    @DeleteMapping(USER_ID)
+    @Operation(summary = "WS qui met à supprime un utilisateur et toutes ses données")
+    public void deleteUser(@Schema(example = "1") @PathVariable("id") final Integer userId) {
+        userService.deleteUser(userId);
+    }
+
     @PutMapping(USER_ID_UPDATE_PASSWORD)
     @Operation(summary = "WS qui met à jour le mot de passe d'un utilisateur")
     public void updatePassword(@Schema(example = "1") @PathVariable("id") final Integer userId,
                                @Valid @RequestBody final UpdatePasswordRequestDto updatePasswordRequestDto) {
         userService.updatePassword(userId, updatePasswordRequestDto);
-    }
-
-    @DeleteMapping(USER_ID)
-    @Operation(summary = "WS qui supprime un utilisateur")
-    public void deleteUser(@Schema(example = "1") @PathVariable("id") final Integer userId) {
-        userService.deleteUser(userId);
     }
 }

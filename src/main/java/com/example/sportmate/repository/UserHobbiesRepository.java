@@ -16,5 +16,4 @@ public interface UserHobbiesRepository extends CrudRepository<UserHobbies, Integ
     @Modifying
     @Query(value = "DELETE FROM user_hobbies WHERE user_id = :userId")
     void deleteAllByUserId(Integer userId);
-
 }

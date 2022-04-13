@@ -6,6 +6,9 @@ import com.example.sportmate.exception.BadRequestException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.user.UpdatePasswordRequestDto;
 import com.example.sportmate.record.user.UserDataDto;
+import com.example.sportmate.repository.UserActivityRepository;
+import com.example.sportmate.repository.UserFavoriteSportRepository;
+import com.example.sportmate.repository.UserHobbiesRepository;
 import com.example.sportmate.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,15 @@ class UserServiceTest implements DataTest {
 
     @MockBean
     UsersRepository usersRepository;
+
+    @MockBean
+    UserFavoriteSportRepository userFavoriteSportRepository;
+
+    @MockBean
+    UserHobbiesRepository userHobbiesRepository;
+
+    @MockBean
+    UserActivityRepository userActivityRepository;
 
     @MockBean
     PasswordEncoder passwordEncoder;
@@ -75,7 +87,8 @@ class UserServiceTest implements DataTest {
         when(usersRepository.findById(ID))
                 .thenReturn(empty());
 
-        assertThatThrownBy(() -> userService.updateUser(ID, buildDefaultUserData()))
+        final UserDataDto userDataDto = buildDefaultUserData();
+        assertThatThrownBy(() -> userService.updateUser(ID, userDataDto))
                 .hasMessageContaining(USER_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -89,7 +102,8 @@ class UserServiceTest implements DataTest {
         when(usersRepository.findByEmailAndIdNot(EMAIL_OTHER, ID))
                 .thenReturn(of(userFound));
 
-        assertThatThrownBy(() -> userService.updateUser(ID, buildDefaultUserData(EMAIL_OTHER)))
+        final UserDataDto userDataDto = buildDefaultUserData(EMAIL_OTHER);
+        assertThatThrownBy(() -> userService.updateUser(ID, userDataDto))
                 .hasMessageContaining("L'email que vous avez choisi est déjà utilisé par un autre utilisateur. Veuillez en choisir un autre.")
                 .isInstanceOf(BadRequestException.class);
     }
@@ -113,7 +127,8 @@ class UserServiceTest implements DataTest {
         when(usersRepository.findById(ID))
                 .thenReturn(empty());
 
-        assertThatThrownBy(() -> userService.updatePassword(ID, new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD)))
+        final UpdatePasswordRequestDto updatePasswordRequestDto = new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD);
+        assertThatThrownBy(() -> userService.updatePassword(ID, updatePasswordRequestDto))
                 .hasMessageContaining(USER_NOT_FOUND.getMessage())
                 .isInstanceOf(NotFoundException.class);
     }
@@ -128,7 +143,8 @@ class UserServiceTest implements DataTest {
         when(passwordService.isPasswordNoMatch(userFound.password(), PASSWORD))
                 .thenReturn(true);
 
-        assertThatThrownBy(() -> userService.updatePassword(ID, new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD)))
+        final UpdatePasswordRequestDto updatePasswordRequestDto = new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD);
+        assertThatThrownBy(() -> userService.updatePassword(ID, updatePasswordRequestDto))
                 .hasMessageContaining(PASSWORD_BAD_REQUEST.getMessage())
                 .isInstanceOf(BadRequestException.class);
     }
@@ -167,6 +183,9 @@ class UserServiceTest implements DataTest {
     @Test
     void deleteUser_should_delete_user_when_user_id_exists() {
         doNothing().when(usersRepository).deleteById(ID);
+        doNothing().when(userFavoriteSportRepository).deleteById(ID);
+        doNothing().when(userHobbiesRepository).deleteById(ID);
+        doNothing().when(userActivityRepository).deleteById(ID);
 
         assertDoesNotThrow(() -> userService.deleteUser(ID));
 

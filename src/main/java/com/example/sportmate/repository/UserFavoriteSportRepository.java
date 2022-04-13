@@ -19,4 +19,8 @@ public interface UserFavoriteSportRepository extends CrudRepository<UserFavorite
             "INNER JOIN sport s ON s.id = ufs.sport_id " +
             "INNER JOIN users u ON ufs.user_id = u.id AND u.id = :userId")
     List<UserFavoriteSport> findUserSports(Integer userId);
+
+    @Modifying
+    @Query(value = "DELETE FROM user_favorite_sport WHERE user_id = :userId")
+    void deleteAllByUserId(Integer userId);
 }
