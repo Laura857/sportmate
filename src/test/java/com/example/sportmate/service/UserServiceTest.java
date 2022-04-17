@@ -69,14 +69,14 @@ class UserServiceTest implements DataTest {
                 .thenReturn(of(userFound));
 
         final UserDataDto userResponse = new UserDataDto(
-                userFound.profilePicture(),
-                userFound.consents(),
-                userFound.email(),
-                userFound.lastName(),
-                userFound.firstName(),
-                userFound.genre(),
-                userFound.birthday(),
-                userFound.mobile());
+                userFound.getProfilePicture(),
+                userFound.isConsents(),
+                userFound.getEmail(),
+                userFound.getLastName(),
+                userFound.getFirstName(),
+                userFound.getGenre(),
+                userFound.getBirthday(),
+                userFound.getMobile());
 
         assertThat(userService.getUser(ID))
                 .isEqualTo(userResponse);
@@ -140,7 +140,7 @@ class UserServiceTest implements DataTest {
         when(usersRepository.findById(ID))
                 .thenReturn(of(userFound));
 
-        when(passwordService.isPasswordNoMatch(userFound.password(), PASSWORD))
+        when(passwordService.isPasswordNoMatch(userFound.getPassword(), PASSWORD))
                 .thenReturn(true);
 
         final UpdatePasswordRequestDto updatePasswordRequestDto = new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD);
@@ -156,7 +156,7 @@ class UserServiceTest implements DataTest {
         when(usersRepository.findById(ID))
                 .thenReturn(of(userFound));
 
-        when(passwordService.isPasswordNoMatch(userFound.password(), PASSWORD))
+        when(passwordService.isPasswordNoMatch(userFound.getPassword(), PASSWORD))
                 .thenReturn(false);
 
         when(passwordEncoder.encode(OTHER_PASSWORD))
@@ -165,17 +165,17 @@ class UserServiceTest implements DataTest {
         assertDoesNotThrow(() -> userService.updatePassword(ID, new UpdatePasswordRequestDto(PASSWORD, OTHER_PASSWORD)));
 
         final Users userToSaved = new Users(
-                userFound.id(),
-                userFound.email(),
+                userFound.getId(),
+                userFound.getEmail(),
                 OTHER_PASSWORD,
-                userFound.lastName(),
-                userFound.firstName(),
-                userFound.mobile(),
-                userFound.profilePicture(),
-                userFound.genre(),
-                userFound.birthday(),
-                userFound.consents(),
-                userFound.created(),
+                userFound.getLastName(),
+                userFound.getFirstName(),
+                userFound.getMobile(),
+                userFound.getProfilePicture(),
+                userFound.getGenre(),
+                userFound.getBirthday(),
+                userFound.isConsents(),
+                userFound.getCreated(),
                 LocalDate.now());
         verify(usersRepository).save(userToSaved);
     }
@@ -183,9 +183,9 @@ class UserServiceTest implements DataTest {
     @Test
     void deleteUser_should_delete_user_when_user_id_exists() {
         doNothing().when(usersRepository).deleteById(ID);
-        doNothing().when(userFavoriteSportRepository).deleteById(ID);
-        doNothing().when(userHobbiesRepository).deleteById(ID);
-        doNothing().when(userActivityRepository).deleteById(ID);
+        doNothing().when(userFavoriteSportRepository).deleteAllByUserId(ID);
+        doNothing().when(userHobbiesRepository).deleteAllByUserId(ID);
+        doNothing().when(userActivityRepository).deleteAllByUserId(ID);
 
         assertDoesNotThrow(() -> userService.deleteUser(ID));
 

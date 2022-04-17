@@ -1,12 +1,21 @@
 package com.example.sportmate.entity;
 
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record UserFavoriteSport(
-        @Id
-        Integer userId,
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
-        Integer sportId,
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class UserFavoriteSport {
+    @Column(nullable = false)
+    private Integer levelId;
 
-        Integer levelId) {
+    @EmbeddedId
+    private UserFavorieSportId userSportId;
 }

@@ -7,6 +7,14 @@ spring:
   jpa:
     properties:
       hibernate:
+        auto-create: true
+        order_inserts: true
+        order_updates: true
+        show_sql: true
+        properties.hibernate.temp.use_jdbc_metadata_defaults: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
 

@@ -35,7 +35,7 @@ public class UsersRepositoryTest implements DataTest {
     private int instantiateAndSaveNewUsers(final String uniqueEmailGenerated) {
         final Users users = new Users(null, uniqueEmailGenerated, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE,
                 GENRE, BIRTHDAY, CONSENTS, CREATED_DATE, null);
-        return usersRepository.save(users).id();
+        return usersRepository.save(users).getId();
     }
 
     public static String generateUniqueEmail() {

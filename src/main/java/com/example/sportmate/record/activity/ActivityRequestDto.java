@@ -45,7 +45,7 @@ public record ActivityRequestDto(
         String activityLevel,
 
         @NotBlank(message = "Le contact est obligatoire.")
-        @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone ne respecte pas le bon format.")
+        @Pattern(regexp = MOBILE_PHONE, message = "Le numéro de téléphone du contact ne respecte pas le bon format.")
         @Schema(example = "0606060606")
         String contact,
 

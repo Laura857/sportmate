@@ -3,6 +3,7 @@ package com.example.sportmate.service;
 import com.example.sportmate.DataTest;
 import com.example.sportmate.entity.Level;
 import com.example.sportmate.entity.Sport;
+import com.example.sportmate.entity.UserFavorieSportId;
 import com.example.sportmate.entity.UserFavoriteSport;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.authentification.signing.SportDto;
@@ -79,7 +80,7 @@ class SportServiceTest implements DataTest {
     @Test
     void getUserSports_should_throw_exception_when_user_favorites_sports_are_found_in_database_but_sport_is_not_found() {
         when(userFavoriteSportRepository.findUserSports(ID))
-                .thenReturn(singletonList(new UserFavoriteSport(ID, ID, ID)));
+                .thenReturn(singletonList(new UserFavoriteSport(ID, new UserFavorieSportId(ID, ID))));
 
         when(sportRepository.findById(ID))
                 .thenReturn(empty());
@@ -92,7 +93,7 @@ class SportServiceTest implements DataTest {
     @Test
     void getUserSports_should_throw_exception_when_user_favorites_sports_are_found_in_database_but_level_is_not_found() {
         when(userFavoriteSportRepository.findUserSports(ID))
-                .thenReturn(singletonList(new UserFavoriteSport(ID, ID, ID)));
+                .thenReturn(singletonList(new UserFavoriteSport(ID, new UserFavorieSportId(ID, ID))));
 
         when(sportRepository.findById(ID))
                 .thenReturn(of(new Sport(ID, SPORT_NAME_SWIM)));
@@ -108,7 +109,8 @@ class SportServiceTest implements DataTest {
     @Test
     void getUserSports_should_return_user_favorites_sports_and_level_when_user_favorites_sports_are_found_in_database() {
         when(userFavoriteSportRepository.findUserSports(ID))
-                .thenReturn(asList(new UserFavoriteSport(ID, ID, ID), new UserFavoriteSport(ID, ID_2, ID_2)));
+                .thenReturn(asList(new UserFavoriteSport(ID, new UserFavorieSportId(ID, ID)),
+                        new UserFavoriteSport(ID_2, new UserFavorieSportId(ID, ID_2))));
 
         when(sportRepository.findById(ID))
                 .thenReturn(of(new Sport(ID, SPORT_NAME_SWIM)));
@@ -123,6 +125,7 @@ class SportServiceTest implements DataTest {
                 .thenReturn(of(new Level(ID_2, LEVEL_NAME_EXPERT)));
 
         assertThat(sportService.getUserSports(ID))
-                .isEqualTo(asList(new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING), new SportDto(SPORT_NAME_RUNNING, LEVEL_NAME_EXPERT)));
+                .isEqualTo(asList(new SportDto(SPORT_NAME_SWIM, LEVEL_NAME_BEGINNING),
+                        new SportDto(SPORT_NAME_RUNNING, LEVEL_NAME_EXPERT)));
     }
 }

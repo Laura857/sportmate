@@ -20,7 +20,7 @@ public class HobbiesService {
 
     public List<String> getUserHobbies(final Integer userId) {
         return hobbiesRepository.findUserHobbies(userId).stream()
-                .map(Hobbies::label)
+                .map(Hobbies::getLabel)
                 .toList();
     }
 
@@ -29,7 +29,7 @@ public class HobbiesService {
         updateUserHobbiesDto.hobbies().forEach(oneHobbies -> {
             final Hobbies hobbiesFound = hobbiesRepository.findByLabel(oneHobbies)
                     .orElseThrow(() -> new NotFoundException(HOBBIES_NOT_FOUND.getMessage()));
-            userHobbiesRepository.save(userId, hobbiesFound.id());
+            userHobbiesRepository.save(userId, hobbiesFound.getId());
         });
     }
 }

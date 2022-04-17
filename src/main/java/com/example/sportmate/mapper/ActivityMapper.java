@@ -15,9 +15,9 @@ import java.time.LocalDate;
 public class ActivityMapper {
     public static Activity buildActivity(final ActivityRequestDto activityRequestDto, final Users user, final Sport sport, final Level level, final Integer activityId) {
         return new Activity(activityId, activityRequestDto.isEvent(), activityRequestDto.activityName(),
-                activityRequestDto.activityDate(), user.id(), activityRequestDto.address(),
+                activityRequestDto.activityDate(), user, activityRequestDto.address(),
                 activityRequestDto.longitude(), activityRequestDto.latitude(), activityRequestDto.participant(),
-                sport.id(), level.id(), activityRequestDto.description(), activityRequestDto.contact(), LocalDate.now(), null);
+                sport, level, activityRequestDto.description(), activityRequestDto.contact(), LocalDate.now(), null);
     }
 
     public static Activity buildActivity(final ActivityRequestDto activityRequestDto, final Users user, final Sport sport, final Level level) {
@@ -25,9 +25,9 @@ public class ActivityMapper {
     }
 
     public static ActivityResponseDto buildActivityResponseDto(final Activity activity, final Sport sport, final Level activityLevel) {
-        return new ActivityResponseDto(activity.id(), activity.isEvent(), activity.activityName(),
-                activity.activityDate(), activity.creator(), activity.address(),
-                activity.longitude(), activity.latitude(), activity.participant(),
-                sport.label(), activityLevel.label(), activity.contact(), activity.description());
+        return new ActivityResponseDto(activity.getId(), activity.isEvent(), activity.getActivityName(),
+                activity.getActivityDate(), activity.getCreator().getId(), activity.getAddress(),
+                activity.getLongitude(), activity.getLatitude(), activity.getParticipant(),
+                sport.getLabel(), activityLevel.getLabel(), activity.getContact(), activity.getDescription());
     }
 }

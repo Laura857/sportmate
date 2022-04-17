@@ -1,49 +1,82 @@
 package com.example.sportmate.entity;
 
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record Activity(
-        @Id Integer id,
+import static javax.persistence.FetchType.LAZY;
 
-        boolean isEvent,
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class Activity {
+    @Id
+//    @SequenceGenerator(allocationSize = 1, name = "ACTIVITY_ID_SEQUENCE_GENERATOR", sequenceName = "ACTIVITY_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACTIVITY_ID_SEQUENCE_GENERATOR")
+    @GeneratedValue(
+            strategy = GenerationType.AUTO,
+            generator = "native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
+    private Integer id;
 
-        String activityName,
+    private boolean isEvent;
 
-        @NotNull(message = "Le date est obligatoire.")
-        LocalDateTime activityDate,
+    private String activityName;
 
-        @NotNull(message = "Le créateur est obligatoire.")
-        Integer creator,
+    @NotNull(message = "Le date est obligatoire.")
+    @Column(nullable = false)
+    private LocalDateTime activityDate;
 
-        @NotBlank(message = "L'addresse est obligatoire'.")
-        String address,
+    @NotNull(message = "Le créateur est obligatoire.")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "creator", nullable = false)
+    private Users creator;
 
-        @NotBlank(message = "La longitude est obligatoire.")
-        String longitude,
+    @NotBlank(message = "L'addresse est obligatoire'.")
+    @Column(nullable = false)
+    private String address;
 
-        @NotBlank(message = "La latitude est obligatoire.")
-        String latitude,
+    @NotBlank(message = "La longitude est obligatoire.")
+    @Column(nullable = false)
+    private String longitude;
 
-        Integer participant,
+    @NotBlank(message = "La latitude est obligatoire.")
+    @Column(nullable = false)
+    private String latitude;
 
-        @NotNull(message = "Le sport est obligatoire.")
-        Integer sport,
+    private Integer participant;
 
-        @NotNull(message = "Le niveau est obligatoire.")
-        Integer activityLevel,
+    @NotNull(message = "Le sport est obligatoire.")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "sport", nullable = false)
+    private Sport sport;
 
-        String description,
+    @NotNull(message = "Le niveau est obligatoire.")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "activityLevel", nullable = false)
+    private Level activityLevel;
 
-        @NotBlank(message = "Le contact est obligatoire.")
-        String contact,
+    private String description;
 
-        @NotNull(message = "La date de création est obligatoire.")
-        LocalDate created,
+    @NotBlank(message = "Le contact est obligatoire.")
+    @Column(nullable = false)
+    private String contact;
 
-        LocalDate updated) {
+    @NotNull(message = "La date de création est obligatoire.")
+    @Column(nullable = false)
+    private LocalDate created;
+
+    private LocalDate updated;
 }

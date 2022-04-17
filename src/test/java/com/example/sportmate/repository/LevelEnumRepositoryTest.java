@@ -47,6 +47,6 @@ class LevelEnumRepositoryTest implements DataTest {
 
     private int instantiateAndSaveNewLevel() {
         final Level level = new Level(null, LEVEL_NAME_BEGINNING);
-        return levelRepository.save(level).id();
+        return levelRepository.save(level).getId();
     }
 }
