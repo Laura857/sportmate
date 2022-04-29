@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsersMapper {
-    public static Users buildUsers(final SigningRequestDto signInRequest, final String password){
+    public static Users buildUsers(final SigningRequestDto signInRequest, final String password) {
         return new Users(
                 null,
                 signInRequest.login().email(),
@@ -26,11 +26,11 @@ public class UsersMapper {
                 null);
     }
 
-    public static Users buildUsers(final UserDataDto userRequest, final Users userSaved){
+    public static Users buildUsers(final UserDataDto userRequest, final Users userSaved) {
         return new Users(
-                userSaved.id(),
+                userSaved.getId(),
                 userRequest.email(),
-                userSaved.password(),
+                userSaved.getPassword(),
                 userRequest.lastName(),
                 userRequest.firstName(),
                 userRequest.mobilePhone(),
@@ -38,35 +38,35 @@ public class UsersMapper {
                 userRequest.genre(),
                 userRequest.birthday(),
                 userRequest.consents(),
-                userSaved.created(),
+                userSaved.getCreated(),
                 LocalDate.now());
     }
 
-    public static Users buildUsers(final Users userSaved, final String password){
+    public static Users buildUsers(final Users userSaved, final String password) {
         return new Users(
-                userSaved.id(),
-                userSaved.email(),
+                userSaved.getId(),
+                userSaved.getEmail(),
                 password,
-                userSaved.lastName(),
-                userSaved.firstName(),
-                userSaved.mobile(),
-                userSaved.profilePicture(),
-                userSaved.genre(),
-                userSaved.birthday(),
-                userSaved.consents(),
-                userSaved.created(),
+                userSaved.getLastName(),
+                userSaved.getFirstName(),
+                userSaved.getMobile(),
+                userSaved.getProfilePicture(),
+                userSaved.getGenre(),
+                userSaved.getBirthday(),
+                userSaved.isConsents(),
+                userSaved.getCreated(),
                 LocalDate.now());
     }
 
-    public static UserDataDto buildUserData(final Users user){
+    public static UserDataDto buildUserData(final Users user) {
         return new UserDataDto(
-                user.profilePicture(),
-                user.consents(),
-                user.email(),
-                user.lastName(),
-                user.firstName(),
-                user.genre(),
-                user.birthday(),
-                user.mobile());
+                user.getProfilePicture(),
+                user.isConsents(),
+                user.getEmail(),
+                user.getLastName(),
+                user.getFirstName(),
+                user.getGenre(),
+                user.getBirthday(),
+                user.getMobile());
     }
 }

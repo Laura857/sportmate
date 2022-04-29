@@ -85,21 +85,31 @@ public interface DataTest {
     }
 
     static Activity buildActivity() {
-        return new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
+        return new Activity(null, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, buildDefaultUsersWithId(),
+                ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, buildSportWithId(), buildLevelWithId(), DESCRIPTION, CONTACT,
+                CREATED_DATE, null);
     }
 
     static Activity buildActivity(final Integer id) {
-        return new Activity(id, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, ID,
-                ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, SPORT_ID, LEVEL_ID, DESCRIPTION, CONTACT, CREATED_DATE, null);
+        return new Activity(id, IS_EVENT, ACTIVITY_NAME, ACTIVITY_DATE, buildDefaultUsersWithId(),
+                ADDRESS, LONGITUDE, LATITUDE, PARTICIPANT, buildSportWithId(), buildLevelWithId(), DESCRIPTION, CONTACT,
+                CREATED_DATE, null);
     }
 
     static Sport buildSport() {
         return new Sport(null, SPORT_NAME_SWIM);
     }
 
+    static Sport buildSportWithId() {
+        return new Sport(SPORT_ID, SPORT_NAME_SWIM);
+    }
+
     static Level buildLevel() {
         return new Level(null, LEVEL_NAME_BEGINNING);
+    }
+
+    static Level buildLevelWithId() {
+        return new Level(LEVEL_ID, LEVEL_NAME_BEGINNING);
     }
 
     static ActivityRequestDto buildDefaultActivityRequest() {
@@ -113,6 +123,11 @@ public interface DataTest {
 
     static Users buildDefaultUsers() {
         return new Users(null, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
+                CONSENTS, LocalDate.now(), null);
+    }
+
+    static Users buildDefaultUsersWithId() {
+        return new Users(ID, EMAIL, PASSWORD, LAST_NAME, FIRST_NAME, MOBILE, PROFILE_PICTURE, GENRE, BIRTHDAY,
                 CONSENTS, LocalDate.now(), null);
     }
 

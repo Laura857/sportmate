@@ -47,6 +47,6 @@ class SportRepositoryTest implements DataTest {
 
     private int instantiateAndSaveNewSport() {
         final Sport sport = new Sport(null, SPORT_NAME_SWIM);
-        return sportRepository.save(sport).id();
+        return sportRepository.save(sport).getId();
     }
 }

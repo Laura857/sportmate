@@ -22,13 +22,13 @@ public class LoginController {
 
     @PostMapping(SIGNING_AND_LOGIN)
     @Operation(summary = "WS d'inscription puis de connexion")
-    public LoginResponseDto signingAndLogin(@RequestBody @Valid final SigningRequestDto signingRequestDto) {
+    public LoginResponseDto signingAndLogin(@Valid @RequestBody final SigningRequestDto signingRequestDto) {
         return loginService.signingAndLogin(signingRequestDto);
     }
 
     @PostMapping(LOGIN)
     @Operation(summary = "Ws de connexion")
-    public LoginResponseDto login(@RequestBody @Valid final LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(@Valid @RequestBody final LoginRequestDto loginRequestDto) {
         return loginService.login(loginRequestDto);
     }
 

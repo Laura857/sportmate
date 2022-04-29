@@ -3,6 +3,7 @@ package com.example.sportmate.service;
 import com.example.sportmate.DataTest;
 import com.example.sportmate.entity.Hobbies;
 import com.example.sportmate.entity.UserHobbies;
+import com.example.sportmate.entity.UserHobbiesId;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.hobbies.UpdateUserHobbiesDto;
 import com.example.sportmate.repository.HobbiesRepository;
@@ -85,8 +86,8 @@ class HobbiesServiceTest implements DataTest {
         when(hobbiesRepository.findByLabel(HOBBIES_BOOK))
                 .thenReturn(Optional.of(new Hobbies(ID_2, HOBBIES_BOOK)));
 
-        final List<UserHobbies> userHobbies = asList(new UserHobbies(ID, ID),
-                new UserHobbies(ID, ID_2));
+        final List<UserHobbies> userHobbies = asList(new UserHobbies(new UserHobbiesId(ID, ID)),
+                new UserHobbies(new UserHobbiesId(ID, ID_2)));
 
         when(userHobbiesRepository.saveAll(userHobbies))
                 .thenReturn(userHobbies);

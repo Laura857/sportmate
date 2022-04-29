@@ -38,10 +38,11 @@ public class UserService {
     public UserDataDto updateUser(final Integer userId, final UserDataDto userRequest) {
         final Users userSaved = usersRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND.getMessage()));
-        if (!userSaved.email().equals(userRequest.email())) {
+        if (!userSaved.getEmail().equals(userRequest.email())) {
             usersRepository.findByEmailAndIdNot(userRequest.email(), userId)
                     .ifPresent(user -> {
-                        throw new BadRequestException("L'email que vous avez choisi est déjà utilisé par un autre utilisateur. Veuillez en choisir un autre.");
+                        throw new BadRequestException("L'email que vous avez choisi est déjà utilisé par un autre " +
+                                "utilisateur. Veuillez en choisir un autre.");
                     });
         }
         usersRepository.save(buildUsers(userRequest, userSaved));
@@ -52,7 +53,7 @@ public class UserService {
         final Users userSaved = usersRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND.getMessage()));
 
-        if (passwordService.isPasswordNoMatch(updatePasswordRequestDto.oldPassword(), userSaved.password())) {
+        if (passwordService.isPasswordNoMatch(updatePasswordRequestDto.oldPassword(), userSaved.getPassword())) {
             throw new BadRequestException(PASSWORD_BAD_REQUEST.getMessage());
         }
         final String passwordEncoded = passwordEncoder.encode(updatePasswordRequestDto.newPassword());

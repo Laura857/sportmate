@@ -47,7 +47,8 @@ public class LoginService {
             saveAllFavoriteSports(signingRequest, userSaved);
             return login(signingRequest.login());
         } catch (final Exception exception) {
-            if (nonNull(exception.getCause()) && exception.getCause().toString().contains("duplicate key value violates unique constraint \"users_email_key\"")) {
+            if (nonNull(exception.getCause()) && exception.getCause().toString()
+                    .contains("duplicate key value violates unique constraint \"users_email_key\"")) {
                 throw new AuthenticationException("Un compte existe déjà pour cette adresse email.");
             }
             throw new AuthenticationException(exception.getMessage());
@@ -60,7 +61,7 @@ public class LoginService {
                     .orElseThrow(() -> new NotFoundException("Inscription erreur : sport non trouvé"));
             final Level levelFound = levelRepository.findByLabel(sport.level())
                     .orElseThrow(() -> new NotFoundException("Inscription erreur : niveau non trouvé"));
-            userFavoriteSportRepository.save(userSaved.id(), sportFound.id(), levelFound.id());
+            userFavoriteSportRepository.save(userSaved.getId(), sportFound.getId(), levelFound.getId());
         });
     }
 
@@ -75,7 +76,7 @@ public class LoginService {
                 .forEach(hobbies -> {
                             final Hobbies hobbiesFound = hobbiesRepository.findByLabel(hobbies)
                                     .orElseThrow(() -> new NotFoundException("Inscription erreur : hobbies non trouvé"));
-                            userHobbiesRepository.save(userSaved.id(), hobbiesFound.id());
+                            userHobbiesRepository.save(userSaved.getId(), hobbiesFound.getId());
                         }
                 );
     }
@@ -83,13 +84,13 @@ public class LoginService {
     public LoginResponseDto login(final LoginRequestDto loginRequestDto) {
         final Users user = usersRepository.findByEmail(loginRequestDto.email())
                 .orElseThrow(() -> new NotFoundException("Connexion refusée : utilisateur non trouvé"));
-        if (passwordService.isPasswordNoMatch(loginRequestDto.password(), user.password())) {
+        if (passwordService.isPasswordNoMatch(loginRequestDto.password(), user.getPassword())) {
             throw new AuthenticationException(PASSWORD_BAD_REQUEST.getMessage());
         }
-        return new LoginResponseDto(user.email(), getJWTToken(loginRequestDto.email()), user.id());
+        return new LoginResponseDto(user.getEmail(), getJWTToken(loginRequestDto.email()), user.getId());
     }
 
-    public String getJWTToken(final String username) {
+    public static String getJWTToken(final String username) {
         final String secretKey = "mySecretKey";
         final List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
@@ -103,12 +104,11 @@ public class LoginService {
                                 .map(GrantedAuthority::getAuthority)
                                 .toList())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis() + 600000))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
     }
 
-    public boolean isEmailAlreadyUsedForAnotherAccount(final String email){
+    public boolean isEmailAlreadyUsedForAnotherAccount(final String email) {
         return usersRepository.findByEmail(email).isPresent();
     }
 }
