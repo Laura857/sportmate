@@ -6,9 +6,11 @@ import com.example.sportmate.repository.searchCriteria.SearchCriteria;
 import com.example.sportmate.repository.searchCriteria.SearchOperation;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.sportmate.record.Regex.LOCAL_DATE;
 import static com.example.sportmate.repository.searchCriteria.SearchOperation.*;
 import static java.lang.Boolean.*;
 import static java.util.Arrays.stream;
@@ -27,7 +29,15 @@ public class ActivitySpecificationsBuilder {
         if (stream(GenreEnum.values()).anyMatch(genreEnum -> genreEnum.name().equals(value))) {
             return GenreEnum.valueOf(value);
         }
+        if (isLocalDate(value)) {
+            final String[] dateSplit = value.split("-");
+            return LocalDate.of(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));
+        }
         return value;
+    }
+
+    private static boolean isLocalDate(final String value) {
+        return value.matches(LOCAL_DATE);
     }
 
     private static boolean isBoolean(final String value) {

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
-import static com.example.sportmate.record.Regex.LOCAL_DATE;
+import static com.example.sportmate.record.Format.LOCAL_DATE;
 import static com.example.sportmate.record.Regex.MOBILE_PHONE;
 
 @Schema(description = "Objet de requête pour l'inscription avec les données de l'utilisateur")

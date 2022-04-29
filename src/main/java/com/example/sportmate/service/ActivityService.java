@@ -38,7 +38,7 @@ import static com.example.sportmate.repository.searchCriteria.SearchOperation.SI
 @AllArgsConstructor
 public class ActivityService {
 
-    private static final String PATTERN = "(\\w+?)(%s)(\\p{Punct}?)([\\p{L} ]+?)(\\p{Punct}?),";
+    private static final String PATTERN = "(\\w+?)(%s)([*]?)([\\p{L}\\p{N}- ]+?)([*]?),";
     private static final int KEY_INDEX = 1;
     private static final int OPERATION_INDEX = 2;
     private static final int PREFIX_INDEX = 3;
