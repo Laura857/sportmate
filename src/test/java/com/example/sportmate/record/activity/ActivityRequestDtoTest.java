@@ -190,7 +190,7 @@ class ActivityRequestDtoTest implements DataTest {
 
         final ConstraintViolation<ActivityRequestDto> violation = violations.iterator().next();
         assertThat(violation.getMessage())
-                .isEqualTo("Le numéro de téléphone ne respecte pas le bon format.");
+                .isEqualTo("Le numéro de téléphone du contact ne respecte pas le bon format.");
 
         assertThat(violation.getPropertyPath().toString())
                 .hasToString("contact");

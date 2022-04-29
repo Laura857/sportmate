@@ -129,7 +129,6 @@ public class ActivityService {
     }
 
     public List<ActivityResponseDto> search(final String search) {
-//        final String searchTrim = search.replace(" ", "");
         final String operation = Joiner.on("|").join(SIMPLE_OPERATION_SET);
         final Pattern pattern = Pattern.compile(String.format(PATTERN, operation));
         final Matcher matcher = pattern.matcher(search + ",");

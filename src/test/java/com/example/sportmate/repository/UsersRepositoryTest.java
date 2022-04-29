@@ -14,12 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UsersRepositoryTest implements DataTest {
     public static int uniqueIdForEmail = 1;
 
-    private final UsersRepository usersRepository;
-
     @Autowired
-    UsersRepositoryTest(final UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
+    private UsersRepository usersRepository;
 
     @Test
     void findById_should_find_a_new_saved_users() {

@@ -13,12 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class SportRepositoryTest implements DataTest {
 
-    private final SportRepository sportRepository;
-
     @Autowired
-    SportRepositoryTest(final SportRepository sportRepository) {
-        this.sportRepository = sportRepository;
-    }
+    private SportRepository sportRepository;
 
     @Test
     void findById_should_find_a_new_saved_sport() {
