@@ -38,7 +38,7 @@ import static com.example.sportmate.repository.searchCriteria.SearchOperation.SI
 @AllArgsConstructor
 public class ActivityService {
 
-    private static final String PATTERN = "(\\w+?)(%s)(\\p{Punct}?)(\\w+?)(\\p{Punct}?),";
+    private static final String PATTERN = "(\\w+?)(%s)(\\p{Punct}?)([\\p{L} ]+?)(\\p{Punct}?),";
     private static final int KEY_INDEX = 1;
     private static final int OPERATION_INDEX = 2;
     private static final int PREFIX_INDEX = 3;
@@ -129,6 +129,7 @@ public class ActivityService {
     }
 
     public List<ActivityResponseDto> search(final String search) {
+//        final String searchTrim = search.replace(" ", "");
         final String operation = Joiner.on("|").join(SIMPLE_OPERATION_SET);
         final Pattern pattern = Pattern.compile(String.format(PATTERN, operation));
         final Matcher matcher = pattern.matcher(search + ",");
