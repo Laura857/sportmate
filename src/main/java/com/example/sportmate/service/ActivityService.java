@@ -82,7 +82,7 @@ public class ActivityService {
         return buildActivityResponseSortByDate(activityRepository.findAll());
     }
 
-    private List<ActivityResponseDto> buildActivityResponseSortByDate(final List<Activity> allActivitiesFind) {
+    public List<ActivityResponseDto> buildActivityResponseSortByDate(final List<Activity> allActivitiesFind) {
         final List<ActivityResponseDto> activityResponse = new ArrayList<>();
         allActivitiesFind.forEach(activity -> {
             final Sport sport = sportRepository.findById(activity.getSport().getId())
