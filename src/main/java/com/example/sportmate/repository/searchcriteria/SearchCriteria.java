@@ -1,4 +1,4 @@
-package com.example.sportmate.repository.searchCriteria;
+package com.example.sportmate.repository.searchcriteria;
 
 public record SearchCriteria(
         String key,

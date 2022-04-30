@@ -32,13 +32,13 @@ import static com.example.sportmate.config.JWTAuthorizationFilter.SECRET;
 import static com.example.sportmate.enumeration.ErrorMessageEnum.*;
 import static com.example.sportmate.mapper.ActivityMapper.buildActivity;
 import static com.example.sportmate.mapper.ActivityMapper.buildActivityResponseDto;
-import static com.example.sportmate.repository.searchCriteria.SearchOperation.SIMPLE_OPERATION_SET;
+import static com.example.sportmate.repository.searchcriteria.SearchOperation.SIMPLE_OPERATION_SET;
 
 @Service
 @AllArgsConstructor
 public class ActivityService {
 
-    private static final String PATTERN = "(\\w+?)(%s)(\\p{Punct}?)([\\p{L} ]+?)(\\p{Punct}?),";
+    private static final String PATTERN = "(\\w+?)(%s)([*]?)([\\p{L}\\p{N}- ]+?)([*]?),";
     private static final int KEY_INDEX = 1;
     private static final int OPERATION_INDEX = 2;
     private static final int PREFIX_INDEX = 3;

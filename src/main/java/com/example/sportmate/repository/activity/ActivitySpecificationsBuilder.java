@@ -1,37 +1,21 @@
 package com.example.sportmate.repository.activity;
 
 import com.example.sportmate.entity.Activity;
-import com.example.sportmate.enumeration.GenreEnum;
-import com.example.sportmate.repository.searchCriteria.SearchCriteria;
-import com.example.sportmate.repository.searchCriteria.SearchOperation;
+import com.example.sportmate.repository.searchcriteria.SearchCriteria;
+import com.example.sportmate.repository.searchcriteria.SearchOperation;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.sportmate.repository.searchCriteria.SearchOperation.*;
-import static java.lang.Boolean.*;
-import static java.util.Arrays.stream;
+import static com.example.sportmate.InstanceUtils.instantiateObjectType;
+import static com.example.sportmate.repository.searchcriteria.SearchOperation.*;
 
 public class ActivitySpecificationsBuilder {
     private final List<SearchCriteria> params;
 
     public ActivitySpecificationsBuilder() {
         params = new ArrayList<>();
-    }
-
-    private static Object instantiateObjectType(final String value) {
-        if (isBoolean(value)) {
-            return parseBoolean(value);
-        }
-        if (stream(GenreEnum.values()).anyMatch(genreEnum -> genreEnum.name().equals(value))) {
-            return GenreEnum.valueOf(value);
-        }
-        return value;
-    }
-
-    private static boolean isBoolean(final String value) {
-        return TRUE.toString().equals(value) || FALSE.toString().equals(value);
     }
 
     public void with(final String key,

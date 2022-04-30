@@ -1,4 +1,4 @@
-package com.example.sportmate.repository.searchCriteria;
+package com.example.sportmate.repository.searchcriteria;
 
 public enum SearchOperation {
     EQUALITY,
@@ -10,7 +10,7 @@ public enum SearchOperation {
     ENDS_WITH,
     CONTAINS;
 
-    public static final String[] SIMPLE_OPERATION_SET = { ":", "!", ">", "<", "~" };
+    public static final String[] SIMPLE_OPERATION_SET = {":", "!", ">", "<", "~"};
 
     public static SearchOperation retrieveSearchOperation(final char input) {
         return switch (input) {

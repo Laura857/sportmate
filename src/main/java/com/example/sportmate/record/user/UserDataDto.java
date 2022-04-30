@@ -9,7 +9,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
-import static com.example.sportmate.record.Regex.*;
+import static com.example.sportmate.record.Format.LOCAL_DATE;
+import static com.example.sportmate.record.Regex.EMAIL;
+import static com.example.sportmate.record.Regex.MOBILE_PHONE;
+
 
 @Schema(description = "Objet avec les informations personnelles d'un utilisateur")
 public record UserDataDto(
