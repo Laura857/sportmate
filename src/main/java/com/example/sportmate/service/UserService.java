@@ -9,6 +9,7 @@ import com.example.sportmate.repository.UserActivityRepository;
 import com.example.sportmate.repository.UserFavoriteSportRepository;
 import com.example.sportmate.repository.UserHobbiesRepository;
 import com.example.sportmate.repository.UsersRepository;
+import com.example.sportmate.repository.activity.ActivityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class UserService {
     private final UserFavoriteSportRepository userFavoriteSportRepository;
     private final UserHobbiesRepository userHobbiesRepository;
     private final UserActivityRepository userActivityRepository;
+    private final ActivityRepository activityRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserDataDto getUser(final Integer userId) {
@@ -65,6 +67,7 @@ public class UserService {
         userHobbiesRepository.deleteAllByUserId(userId);
         userFavoriteSportRepository.deleteAllByUserId(userId);
         userActivityRepository.deleteAllByUserId(userId);
+        activityRepository.deleteAllByCreator(userId);
         usersRepository.deleteById(userId);
     }
 }
