@@ -7,6 +7,7 @@ import com.example.sportmate.entity.Users;
 import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.record.ResponseDefaultDto;
+import com.example.sportmate.record.activity.ActivityParticipantsResponseDto;
 import com.example.sportmate.record.activity.ActivityRequestDto;
 import com.example.sportmate.record.activity.ActivityResponseDto;
 import com.example.sportmate.repository.LevelRepository;
@@ -143,6 +144,12 @@ public class ActivityService {
         }
         return activityRepository.findAll(builder.build()).stream()
                 .map(activity -> buildActivityResponseDto(activity, activity.getSport(), activity.getActivityLevel()))
+                .toList();
+    }
+
+    public List<ActivityParticipantsResponseDto> getActivityParticipants(final Integer activityId) {
+        return usersRepository.findActivityParticipants(activityId)
+                .stream().map(user -> new ActivityParticipantsResponseDto(user.getFirstName(), user.getLastName()))
                 .toList();
     }
 }

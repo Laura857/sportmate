@@ -1,6 +1,7 @@
 package com.example.sportmate.controller;
 
 import com.example.sportmate.record.ResponseDefaultDto;
+import com.example.sportmate.record.activity.ActivityParticipantsResponseDto;
 import com.example.sportmate.record.activity.ActivityRequestDto;
 import com.example.sportmate.record.activity.ActivityResponseDto;
 import com.example.sportmate.service.ActivityService;
@@ -19,12 +20,14 @@ import java.util.List;
 public class ActivityController {
     private static final String ACTIVITY = "api/activity";
     private static final String ACTIVITY_ID = ACTIVITY + "/{id}";
+    private static final String ACTIVITY_ID_USER_PARTICIPATE = ACTIVITY_ID + "/user/{userId}/participate";
+    private static final String ACTIVITY_PARTICIPANTS = ACTIVITY_ID + "/participants";
     private static final String ACTIVITY_ALL = ACTIVITY + "/all";
     private static final String ACTIVITY_USER = ACTIVITY + "/user";
     private static final String ACTIVITY_USER_PARTICIPATE = ACTIVITY_USER + "/{userId}/participate";
-    private static final String ACTIVITY_ID_USER_PARTICIPATE = ACTIVITY_ID + "/user/{userId}/participate";
     private static final String HEADER = "Authorization";
     private static final String ACTIVITY_SEARCH = ACTIVITY + "/search";
+
     private final ActivityService activityService;
     private final UserActivityService userActivityService;
 
@@ -91,5 +94,11 @@ public class ActivityController {
     public void deleteUserParticipateActivity(@Schema(example = "1") @PathVariable final Integer userId,
                                               @Schema(example = "10") @PathVariable("id") final Integer activityId) {
         userActivityService.deleteUserParticipateActivity(userId, activityId);
+    }
+
+    @GetMapping(ACTIVITY_PARTICIPANTS)
+    @Operation(summary = "WS qui récupère les partipants d'une activité")
+    public List<ActivityParticipantsResponseDto> getActivityParticipants(@Schema(example = "1") @PathVariable("id") final Integer activityId) {
+        return activityService.getActivityParticipants(activityId);
     }
 }

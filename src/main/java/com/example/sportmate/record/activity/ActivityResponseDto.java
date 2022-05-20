@@ -2,7 +2,6 @@ package com.example.sportmate.record.activity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
