@@ -18,5 +18,4 @@ public interface UsersRepository extends CrudRepository<Users, Integer> {
             "INNER JOIN user_activity ua ON users.id = ua.user_id " +
             "WHERE activity_id = :activityId", nativeQuery = true)
     List<Users> findActivityParticipants(Integer activityId);
-
 }
