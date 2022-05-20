@@ -147,9 +147,10 @@ public class ActivityService {
                 .toList();
     }
 
-    public List<ActivityParticipantsResponseDto> getActivityParticipants(final Integer activityId) {
-        return usersRepository.findActivityParticipants(activityId)
-                .stream().map(user -> new ActivityParticipantsResponseDto(user.getFirstName(), user.getLastName()))
+    public List<ActivityParticipantsResponseDto> getActivityParticipants(final Integer activityId, final Integer userId) {
+        return usersRepository.findActivityParticipants(activityId).stream()
+                .filter(user -> !userId.equals(user.getId()))
+                .map(user -> new ActivityParticipantsResponseDto(user.getFirstName(), user.getLastName()))
                 .toList();
     }
 }
