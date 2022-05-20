@@ -9,6 +9,7 @@ import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
 import com.example.sportmate.mapper.ActivityMapper;
 import com.example.sportmate.record.ResponseDefaultDto;
+import com.example.sportmate.record.activity.ActivityParticipantsResponseDto;
 import com.example.sportmate.record.activity.ActivityRequestDto;
 import com.example.sportmate.record.activity.ActivityResponseDto;
 import com.example.sportmate.repository.LevelRepository;
@@ -33,6 +34,8 @@ import static com.example.sportmate.DataTest.*;
 import static com.example.sportmate.enumeration.ErrorMessageEnum.*;
 import static com.example.sportmate.mapper.ActivityMapper.buildActivityResponseDto;
 import static com.example.sportmate.service.LoginService.getJWTToken;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -283,6 +286,27 @@ class ActivityServiceTest implements DataTest {
         assertThat(response)
                 .isEqualTo(new ResponseEntity<>(new ResponseDefaultDto("Activité " + ID + " supprimé"), HttpStatus.OK));
 
+    }
+
+    @Test
+    void getActivityParticipants_should_return_empty_list_when_activity_doesnt_have_participants() {
+        when(usersRepository.findActivityParticipants(ID))
+                .thenReturn(emptyList());
+
+        assertThat(activityService.getActivityParticipants(ID))
+                .isEmpty();
+    }
+
+    @Test
+    void getActivityParticipants_should_return_participants_when_activity_participants() {
+        when(usersRepository.findActivityParticipants(ID))
+                .thenReturn(asList(buildNewUser(), buildDefaultUsers()));
+
+        final ActivityParticipantsResponseDto activityParticipant = new ActivityParticipantsResponseDto(FIRST_NAME, LAST_NAME);
+        final ActivityParticipantsResponseDto activityParticipant2 = new ActivityParticipantsResponseDto(FIRST_NAME, LAST_NAME);
+
+        assertThat(activityService.getActivityParticipants(ID))
+                .isEqualTo(asList(activityParticipant, activityParticipant2));
     }
 
     private void instantiateAndSaveNewActivity() {
