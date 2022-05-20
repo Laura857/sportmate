@@ -26,7 +26,7 @@ public class ActivityController {
     private static final String ACTIVITY_USER_PARTICIPATE = ACTIVITY_USER + "/{userId}/participate";
     private static final String HEADER = "Authorization";
     private static final String ACTIVITY_SEARCH = ACTIVITY + "/search";
-    private static final String ACTIVITY_PARTICIPANTS = ACTIVITY_ID + "/user/{userId}/participants";
+    private static final String ACTIVITY_PARTICIPANTS = ACTIVITY_ID + "/participants";
 
 
     private final ActivityService activityService;
@@ -99,8 +99,7 @@ public class ActivityController {
 
     @GetMapping(ACTIVITY_PARTICIPANTS)
     @Operation(summary = "WS qui récupère les partipants d'une activité")
-    public List<ActivityParticipantsResponseDto> getActivityParticipants(@Schema(example = "1") @PathVariable("id") final Integer activityId,
-                                                                         @Schema(example = "1") @PathVariable("userId") final Integer userId) {
-        return activityService.getActivityParticipants(activityId, userId);
+    public List<ActivityParticipantsResponseDto> getActivityParticipants(@Schema(example = "1") @PathVariable("id") final Integer activityId) {
+        return activityService.getActivityParticipants(activityId);
     }
 }

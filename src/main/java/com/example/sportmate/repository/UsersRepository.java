@@ -15,7 +15,8 @@ public interface UsersRepository extends CrudRepository<Users, Integer> {
     Optional<Users> findByEmailAndIdNot(String email, Integer id);
 
     @Query(value = "SELECT * FROM users " +
-            "INNER JOIN user_activity ua ON users.id = ua.user_id " +
-            "WHERE activity_id = :activityId", nativeQuery = true)
+            "INNER JOIN user_activity ua ON users.id = ua.user_id AND activity_id = :activityId " +
+            "INNER JOIN activity a ON ua.activity_id = a.id " +
+            "WHERE ua.user_id <> a.creator;", nativeQuery = true)
     List<Users> findActivityParticipants(Integer activityId);
 }
