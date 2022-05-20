@@ -300,21 +300,21 @@ class ActivityServiceTest implements DataTest {
     @Test
     void getActivityParticipants_should_return_empty_list_when_activity_doesnt_have_participants_except_of_creator() {
         when(usersRepository.findActivityParticipants(ID))
-                .thenReturn(singletonList(buildNewUser()));
+                .thenReturn(singletonList(buildNewUserDefault()));
 
-        assertThat(activityService.getActivityParticipants(ID, ID_2))
+        assertThat(activityService.getActivityParticipants(ID, ID))
                 .isEmpty();
     }
 
     @Test
     void getActivityParticipants_should_return_participants_when_activity_participants() {
         when(usersRepository.findActivityParticipants(ID))
-                .thenReturn(asList(buildNewUser(), buildDefaultUsers()));
+                .thenReturn(asList(buildNewUserDefault(), buildNewUserDefault()));
 
         final ActivityParticipantsResponseDto activityParticipant = new ActivityParticipantsResponseDto(FIRST_NAME, LAST_NAME);
         final ActivityParticipantsResponseDto activityParticipant2 = new ActivityParticipantsResponseDto(FIRST_NAME, LAST_NAME);
 
-        assertThat(activityService.getActivityParticipants(ID, ID))
+        assertThat(activityService.getActivityParticipants(ID, ID_2))
                 .isEqualTo(asList(activityParticipant, activityParticipant2));
     }
 
