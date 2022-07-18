@@ -31,7 +31,6 @@ public record UserRequestDto(
         @NotNull(message = "Le genre est obligatoire.")
         GenreEnum genre,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE)
         @Schema(example = "2021-10-10")
         LocalDate birthday,
 
