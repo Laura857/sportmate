@@ -16,7 +16,7 @@ public class LevelService {
 
     public List<String> getAllLevels() {
         return stream(levelRepository.findAll().spliterator(), false)
-                .map(Level::label)
+                .map(Level::getLabel)
                 .toList();
     }
 }

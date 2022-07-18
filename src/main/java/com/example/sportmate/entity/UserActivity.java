@@ -1,6 +1,18 @@
 package com.example.sportmate.entity;
 
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record UserActivity(@Id Integer fk_id_user, Integer fk_id_activity) {
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class UserActivity {
+    @EmbeddedId
+    private UserActivityId userActivityId;
 }
+

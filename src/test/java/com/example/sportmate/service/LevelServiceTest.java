@@ -3,8 +3,6 @@ package com.example.sportmate.service;
 import com.example.sportmate.entity.Level;
 import com.example.sportmate.repository.LevelRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

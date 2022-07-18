@@ -1,11 +1,20 @@
 package com.example.sportmate.entity;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record UserHobbies(
-        Integer userId,
-        Integer hobbiesId,
-        LocalDateTime created) {
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class UserHobbies {
+    @EmbeddedId
+    @Column(nullable = false, unique = true)
+    private UserHobbiesId id;
 }
-
-

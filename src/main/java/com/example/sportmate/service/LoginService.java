@@ -6,9 +6,9 @@ import com.example.sportmate.entity.Sport;
 import com.example.sportmate.entity.Users;
 import com.example.sportmate.exception.AuthenticationException;
 import com.example.sportmate.exception.NotFoundException;
-import com.example.sportmate.record.LoginRequestDto;
-import com.example.sportmate.record.LoginResponseDto;
-import com.example.sportmate.record.signin.SigningRequestDto;
+import com.example.sportmate.record.authentification.login.LoginRequestDto;
+import com.example.sportmate.record.authentification.login.LoginResponseDto;
+import com.example.sportmate.record.authentification.signing.SigningRequestDto;
 import com.example.sportmate.repository.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static com.example.sportmate.enumeration.ErrorMessageEnum.PASSWORD_BAD_REQUEST;
 import static com.example.sportmate.mapper.UsersMapper.buildUsers;
 import static java.util.Objects.nonNull;
 
@@ -36,6 +37,7 @@ public class LoginService {
     private final LevelRepository levelRepository;
     private final UserFavoriteSportRepository userFavoriteSportRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
 
     @Transactional
     public LoginResponseDto signingAndLogin(final SigningRequestDto signingRequest) {
@@ -45,7 +47,8 @@ public class LoginService {
             saveAllFavoriteSports(signingRequest, userSaved);
             return login(signingRequest.login());
         } catch (final Exception exception) {
-            if (nonNull(exception.getCause()) && exception.getCause().toString().contains("duplicate key value violates unique constraint \"users_email_key\"")) {
+            if (nonNull(exception.getCause()) && exception.getCause().toString()
+                    .contains("duplicate key value violates unique constraint \"users_email_key\"")) {
                 throw new AuthenticationException("Un compte existe déjà pour cette adresse email.");
             }
             throw new AuthenticationException(exception.getMessage());
@@ -58,7 +61,7 @@ public class LoginService {
                     .orElseThrow(() -> new NotFoundException("Inscription erreur : sport non trouvé"));
             final Level levelFound = levelRepository.findByLabel(sport.level())
                     .orElseThrow(() -> new NotFoundException("Inscription erreur : niveau non trouvé"));
-            userFavoriteSportRepository.save(userSaved.id(), sportFound.id(), levelFound.id());
+            userFavoriteSportRepository.save(userSaved.getId(), sportFound.getId(), levelFound.getId());
         });
     }
 
@@ -73,7 +76,7 @@ public class LoginService {
                 .forEach(hobbies -> {
                             final Hobbies hobbiesFound = hobbiesRepository.findByLabel(hobbies)
                                     .orElseThrow(() -> new NotFoundException("Inscription erreur : hobbies non trouvé"));
-                            userHobbiesRepository.save(userSaved.id(), hobbiesFound.id());
+                            userHobbiesRepository.save(userSaved.getId(), hobbiesFound.getId());
                         }
                 );
     }
@@ -81,17 +84,13 @@ public class LoginService {
     public LoginResponseDto login(final LoginRequestDto loginRequestDto) {
         final Users user = usersRepository.findByEmail(loginRequestDto.email())
                 .orElseThrow(() -> new NotFoundException("Connexion refusée : utilisateur non trouvé"));
-        if (isPasswordNoMatch(loginRequestDto, user)) {
-            throw new AuthenticationException("Le mot de passe est incorrect");
+        if (passwordService.isPasswordNoMatch(loginRequestDto.password(), user.getPassword())) {
+            throw new AuthenticationException(PASSWORD_BAD_REQUEST.getMessage());
         }
-        return new LoginResponseDto(user.email(), getJWTToken(loginRequestDto.email()));
+        return new LoginResponseDto(user.getEmail(), getJWTToken(loginRequestDto.email()), user.getId());
     }
 
-    private boolean isPasswordNoMatch(final LoginRequestDto loginRequestDto, final Users user) {
-        return !passwordEncoder.matches(loginRequestDto.password(), user.password());
-    }
-
-    public String getJWTToken(final String username) {
+    public static String getJWTToken(final String username) {
         final String secretKey = "mySecretKey";
         final List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
@@ -105,9 +104,12 @@ public class LoginService {
                                 .map(GrantedAuthority::getAuthority)
                                 .toList())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
+    }
+
+    public boolean isEmailAlreadyUsedForAnotherAccount(final String email) {
+        return usersRepository.findByEmail(email).isPresent();
     }
 }
 
