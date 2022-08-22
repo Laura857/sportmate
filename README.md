@@ -40,15 +40,11 @@ Via votre IDE lancer le projet, il démarrera sur le port localhost:8080
 
 
 ## Documentation API :
-[Swagger qual](https://sportmate-develop.herokuapp.com/swagger-ui/index.html#/user-controller)
-
-[Swagger prod](https://sportmate-master.herokuapp.com/swagger-ui/index.html#/user-controller)
+[Swagger prod](https://sportmate-develop.herokuapp.com/swagger-ui/index.html#/user-controller)
 
 ## Environnements :
 
 - [Sportmate local](http://localhost:8080)
 
-- [Sportmate qual](https://sportmate-develop.herokuapp.com)
-
-- [Sportmate prod](https://sportmate-master.herokuapp.com)
+- [Sportmate prod](https://sportmate-develop.herokuapp.com)
 
