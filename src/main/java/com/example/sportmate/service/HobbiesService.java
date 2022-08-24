@@ -7,6 +7,7 @@ import com.example.sportmate.repository.HobbiesRepository;
 import com.example.sportmate.repository.UserHobbiesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,7 +25,8 @@ public class HobbiesService {
                 .toList();
     }
 
-    public void updateUserHobbies(final Integer userId, final UpdateUserHobbiesDto updateUserHobbiesDto) {
+   @Transactional
+   public void updateUserHobbies(final Integer userId, final UpdateUserHobbiesDto updateUserHobbiesDto) {
         userHobbiesRepository.deleteAllByUserId(userId);
         updateUserHobbiesDto.hobbies().forEach(oneHobbies -> {
             final Hobbies hobbiesFound = hobbiesRepository.findByLabel(oneHobbies)

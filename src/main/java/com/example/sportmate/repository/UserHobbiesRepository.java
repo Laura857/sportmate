@@ -16,5 +16,5 @@ public interface UserHobbiesRepository extends CrudRepository<UserHobbies, UserH
 
     @Modifying
     @Query(value = "DELETE FROM user_hobbies WHERE user_id = :userId", nativeQuery = true)
-    void deleteAllByUserId(Integer userId);
+    void deleteAllByUserId(@Param("userId") Integer userId);
 }
