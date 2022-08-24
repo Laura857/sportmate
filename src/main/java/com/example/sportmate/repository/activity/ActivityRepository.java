@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -20,6 +22,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer>, Jp
             "INNER JOIN user_activity ON user_activity.activity_id = activity.id " +
             " WHERE user_id = :userId", nativeQuery = true)
     List<Activity> findParticipateActivitiesByUserId(Integer userId);
+
+    List<Activity> findByAndActivityDateGreaterThanEqual(LocalDateTime today);
 
     @Modifying
     @Query(value = "DELETE FROM activity WHERE creator = :userId", nativeQuery = true)

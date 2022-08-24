@@ -52,9 +52,9 @@ public class ActivityController {
     }
 
     @GetMapping(ACTIVITY_ALL)
-    @Operation(summary = "WS qui récupère les informations de toutes les activités")
-    public List<ActivityResponseDto> getAllActivities() {
-        return activityService.getAllActivities();
+    @Operation(summary = "WS qui récupère les informations de toutes les activités actives")
+    public List<ActivityResponseDto> getAllActivesActivities() {
+        return activityService.getAllActivesActivities();
     }
 
     @GetMapping(ACTIVITY_USER)

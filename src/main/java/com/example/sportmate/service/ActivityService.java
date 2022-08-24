@@ -23,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -79,8 +81,8 @@ public class ActivityService {
         return buildActivityResponseDto(activity, sport, level);
     }
 
-    public List<ActivityResponseDto> getAllActivities() {
-        return buildActivityResponseSortByDate(activityRepository.findAll());
+    public List<ActivityResponseDto> getAllActivesActivities() {
+        return buildActivityResponseSortByDate(activityRepository.findByAndActivityDateGreaterThanEqual(LocalDateTime.now()));
     }
 
     public List<ActivityResponseDto> buildActivityResponseSortByDate(final List<Activity> allActivitiesFind) {

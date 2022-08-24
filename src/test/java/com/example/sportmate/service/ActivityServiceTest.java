@@ -27,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +44,7 @@ import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -139,16 +142,16 @@ class ActivityServiceTest implements DataTest {
     }
 
     @Test
-    void getAllActivities_should_retourne_all_activity_saved() {
+    void getAllActivities_should_return_all_activity_saved() {
         final Activity activity = buildActivity();
         final Sport sport = buildSport();
         final Level level = buildLevel();
 
-        when(activityRepository.findAll()).thenReturn(singletonList(activity));
+        when(activityRepository.findByAndActivityDateGreaterThanEqual(any())).thenReturn(singletonList(activity));
         when(sportRepository.findById(activity.getSport().getId())).thenReturn(of(sport));
         when(levelRepository.findById(activity.getActivityLevel().getId())).thenReturn(of(level));
 
-        final List<ActivityResponseDto> allActivities = activityService.getAllActivities();
+        final List<ActivityResponseDto> allActivities = activityService.getAllActivesActivities();
         assertThat(allActivities)
                 .isEqualTo(singletonList(buildActivityResponseDto(activity, sport, level)));
     }
