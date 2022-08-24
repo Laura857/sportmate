@@ -39,7 +39,6 @@ public record UserDataDto(
         GenreEnum genre,
 
         @NotNull(message = "La date d'anniversaire est obligatoire.")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = LOCAL_DATE)
         @Schema(example = "2021-10-10")
         LocalDate birthday,
 
